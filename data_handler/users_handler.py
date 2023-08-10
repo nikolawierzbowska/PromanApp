@@ -18,3 +18,4 @@ def add_user(cursor, user_name, email, password):
                     RETURNING id;""",
                    {"user_name":user_name , "email":email, "password": password })
     return cursor.fetchone()["id"]
+

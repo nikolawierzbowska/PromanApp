@@ -11,3 +11,12 @@ def get_card_status(cursor, status_id):
         , {"status_id": status_id})
 
     return cursor.fetchone()
+
+
+@connection.connection_handler
+def get_statuses(cursor):
+    cursor.execute(
+        """
+        SELECT * FROM statuses;
+        """)
+    return cursor.fetchall()

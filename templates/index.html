@@ -1,10 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
+{% extends 'layout_table.html' %}
+
+{% block head %}
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>ProMan</title>
+
+    {% block title %}ProMan{% endblock %}
 
         <link rel="shortcut icon" href="{{ url_for('static', filename='favicon/favicon.ico') }}">
         <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon/favicon-32x32.png') }}">
@@ -13,8 +14,30 @@
 
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
         <script type="module" src="{{ url_for('static', filename='js/main.js') }}" defer></script>
-    </head>
-    <body>
+{% endblock %}
+
+{% block header %}
+<h1>ProMan</h1>
+{% endblock %}
+
+{% block nav %}
+     <ul><li><a href="/">Main page</a></li></ul>
+{% endblock %}
+
+
+{% block main %}
+
+    <form method="post">
+    <p>
+        <label for="title">Title:</label>
+    </p>
+    <input name="title" id="title" required>
+    <p>
+        <a href="/"><button id="submit_title" type="submit">Submit</button></a>
+    </p>
+    </form>
+
+
         <div id="root"></div>
-    </body>
-</html>
+{% endblock %}
+
