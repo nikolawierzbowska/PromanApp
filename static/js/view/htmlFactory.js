@@ -1,11 +1,11 @@
 export const htmlTemplates = {
     board: 1,
-    card: 2
+    card: 2,
 }
 
 export const builderFunctions = {
     [htmlTemplates.board]: boardBuilder,
-    [htmlTemplates.card]: cardBuilder
+    [htmlTemplates.card]: cardBuilder,
 };
 
 export function htmlFactory(template) {
@@ -22,12 +22,22 @@ export function htmlFactory(template) {
 
 function boardBuilder(board) {
     return `<div class="board-container">
-                <div class="board" data-board-id=${board.id}>${board.title}</div>
-                <button class="toggle-board-button" data-board-id="${board.id}">Show Cards</button>
-            </div>`;
+                <div class="board" data-board-id=${board.id}>${board.title}
+                <button class="toggle-board-button" id="buttonUpDown"  data-board-id="${board.id}">&#9660</button>
+                <button type="button" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#renameBoardModal"  data-board-id="${board.id}">
+            Rename Board</button>
+                <button type="button" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#addCard" data-board-id="${board.id}">
+            Add Card</button>
+            
+            <button type="button" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#deleteBoard" data-board-id="${board.id}">
+            Add Card</button>
+                       
+            </div></div>`;
 }
 
 function cardBuilder(card) {
     return `<div class="card" data-card-id="${card.id}">${card.title}</div>`;
 }
+
+
 

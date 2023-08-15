@@ -3,7 +3,7 @@ import bcrypt as bcrypt
 from dotenv import load_dotenv
 from util import json_response
 import mimetypes
-import config
+
 from data_handler import boards_handler, cards_handler, status_handler, users_handler
 
 mimetypes.add_type('application/javascript', '.js')
@@ -13,75 +13,51 @@ load_dotenv()
 app.secret_key = "96449384-97ca-4e24-bdec-58a7dc8f59fc"
 
 
-@app.route('/registration', methods=['POST', 'GET'])
+@app.route('/api/registration', methods=['POST'])
+@json_response
 def registration():
-    if request.method == 'GET':
-        return render_template("registration.html")
-    else:
-        user_name = request.form['user_name']
-        email = request.form['email']
-        password = request.form['password']
-        repeat_password = request.form['repeat_password']
-
-        errors = []
-
-        if not password == repeat_password:
-            errors.append("Passwords not match")
-
-        if len(password) not in config.PASSWORD_LENGTH:
-            errors.append(f"Password should have from {config.PASSWORD_LENGTH_MIN} to {config.PASSWORD_LENGTH_MAX} "
-                          f"characters.")
-        if len(user_name) not in config.USERNAME_LENGTH:
-            errors.append(f"Username should have from {config.USERNAME_LENGTH_MIN} to {config.USERNAME_LENGTH_MAX} "
-                          f"characters.")
-        if users_handler.get_user_by_name(user_name, email):
-            errors.append("User with this name or email already exists.")
-        if len(errors):
-            return render_template("registration.html", errors=errors)
-
-        hashed_password = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
-        user_id = users_handler.add_user(user_name, email, hashed_password.decode("utf-8"))
-
-        if user_id:
-            return render_template("registration_confirm.html")
-        else:
-            return render_template("registration.html", errors='Unknown error, please try later.')
+    data = request.json
+    users_handler.add_user(data["userName"], data["email"],  data["passwordRegister"])
+    return data
 
 
-
-@app.route('/login', methods=['POST', 'GET'])
+@app.route('/login', methods=['POST'])
+@json_response
 def login():
-    if request.method == 'GET':
-        return render_template("login.html")
-    else:
-        user_name_email = request.form['user_name_email']
-        password = request.form['password']
-        errors = []
-        user = users_handler.get_user_by_name(user_name_email, user_name_email)
-        if not user:
-            errors.append(f'{user_name_email} not exist')
-            return render_template("login.html", errors=errors)
+    data = request.json
+    users_handler.get_user_by_name(data["userNameEmail"], data["passwordRegister"])
+    return data
+    # if request.method == 'GET':
+    #     return render_template("login.html")
+    # else:
+    #     user_name_email = request.form['user_name_email']
+    #     password = request.form['password']
+    #     errors = []
+    #     user = users_handler.get_user_by_name(user_name_email, user_name_email)
+    #     if not user:
+    #         errors.append(f'{user_name_email} not exist')
+    #         return render_template("login.html", errors=errors)
+    #
+    #     is_password_correct = bcrypt.checkpw(password.encode("utf-8"), user['password'].encode("utf-8"))
+    #
+    #     if is_password_correct:
+    #         session['user_name_email'] = user_name_email
+    #         session['is_logged'] = True
+    #         session['user_id'] = user['id']
+    #         # return redirect(f"/user/{user['id']}")
+    #         return redirect("/")
+    #     else:
+    #         return render_template("login.html", errors=['Password incorrect!'])
 
-        is_password_correct = bcrypt.checkpw(password.encode("utf-8"), user['password'].encode("utf-8"))
 
-        if is_password_correct:
-            session['user_name_email'] = user_name_email
-            session['is_logged'] = True
-            session['user_id'] = user['id']
-            # return redirect(f"/user/{user['id']}")
-            return redirect("/")
-        else:
-            return render_template("login.html", errors=['Password incorrect!'])
+# def is_logged():
+#     return "is_logged" in session and session["is_logged"]
 
 
-def is_logged():
-    return "is_logged" in session and session["is_logged"]
-
-
-@app.route('/logout', methods=['GET'])
-def logout():
-    session.clear()
-    return redirect("/")
+# @app.route('/logout', methods=['GET'])
+# def logout():
+#     session.clear()
+#     return redirect("/")
 
 
 @app.route("/")
@@ -111,7 +87,7 @@ def get_board(board_id: int):
 @json_response
 def create_new_board():
     data = request.json
-    boards_handler.add_board(data["title"])
+    boards_handler.add_board(data["titleBoard"])
     return data
 
 
@@ -163,11 +139,12 @@ def delete_card(card_id):
     return cards_handler.delete_card_by_id(card_id)
 
 
-@app.route("/api/update_board/", methods=["PATCH"])
+@app.route("/api/update_board/<int:board_id>", methods=["PATCH"])
 @json_response
-def update_board():
+def update_board(board_id:int):
     data = request.json
-    boards_handler.update_board_by_id(data["board_id"],data["title"])
+    boards_handler.update_board_by_id(board_id, data["renameBoard"])
+    # boards_handler.update_board_by_id(data["renameBoard"])
     return data
 
 

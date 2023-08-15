@@ -1,6 +1,14 @@
 export let dataHandler = {
+    createUser: async function(data) {
+        return await apiPost(`/api/registration`,data)
+    },
+
+    getUser: async function(data) {
+        return await apiPost(`/api/login`, data)
+    },
+
     getBoards: async function () {
-        return await apiGet("/api/boards");
+        return await apiGet(`/api/boards`);
     },
     getBoard: async function (boardId) {
         return await apiGet(`/api/boards/${boardId}`);
@@ -36,7 +44,7 @@ export let dataHandler = {
         return await apiDelete(`/api/delete_card/${cardId}`)
     },
     updateBoard: async function (boardId, boardTitle) {
-    return await apiPatch(`/api/update_board`, [boardId, boardTitle])
+    return await apiPatch(`/api/update_board/${boardId}`, boardTitle)
     },
     updateCard: async function (cardId, cardTitle) {
         return await apiPatch(`/api/delete_card`, [cardId, cardTitle])
@@ -57,13 +65,12 @@ async function apiGet(url) {
 async function apiPost(url, payload) {
      const response = await fetch(url, {
         method: "POST",
-         body: JSON.stringify(payload),
          headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
-         }
+         },
+         body: JSON.stringify(payload),
     });
-     console.log(response)
     if (response.ok) {
         return await response.json();
     }
