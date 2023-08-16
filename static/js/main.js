@@ -8,7 +8,7 @@ function init() {
     boardsManager.createNewBoard();
 
     boardsManager.renameBoard()
-
+    boardsManager.deleteBoard()
     registration()
     login()
 

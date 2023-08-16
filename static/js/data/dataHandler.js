@@ -34,7 +34,7 @@ export let dataHandler = {
         // creates new board, saves it and calls the callback function with its data
     },
     createNewCard: async function (cardTitle, boardId, statusId) {
-        return await apiPost(`/api/new_card`, [boardId, statusId, cardTitle])
+        return await apiPost(`/api/boards/${boardId}/cards/statuses/${statusId}`, cardTitle)
         // creates new card, saves it and calls the callback function with its data
     },
     deleteBoard: async function (boardId) {
@@ -47,7 +47,7 @@ export let dataHandler = {
     return await apiPatch(`/api/update_board/${boardId}`, boardTitle)
     },
     updateCard: async function (cardId, cardTitle) {
-        return await apiPatch(`/api/delete_card`, [cardId, cardTitle])
+        return await apiPatch(`/api/delete_card/${cardId}`, cardTitle)
     },
 };
 
