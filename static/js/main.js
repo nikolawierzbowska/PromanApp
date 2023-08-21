@@ -1,14 +1,11 @@
 import {boardsManager} from "./controller/boardsManager.js";
 import {dataHandler} from "./data/dataHandler.js";
-// import bcrypt from 'bcryptjs'
+
 
 
 function init() {
     boardsManager.loadBoards();
-    boardsManager.createNewBoard();
 
-    boardsManager.renameBoard()
-    boardsManager.deleteBoard()
     registration()
     login()
 

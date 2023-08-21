@@ -85,13 +85,13 @@
                             </svg>
 
                             <label for="password-repeat" class="form-label">
-                            Repeat password: </label>
+                                Repeat password: </label>
                             <input id="password-repeat" class="form-control border-primary" name="password-repeat"
-                                   type="password"  required>
+                                   type="password" required>
                             <p id="messagePasswordRepeat" style="color: darkred"></p>
                         </div>
-                         <div class="d-grid gap-2 col-6 mx-auto">
-                            <button id="buttonRegister"  type="submit" class="btn btn-primary .d-block" >Register</button>
+                        <div class="d-grid gap-2 col-6 mx-auto">
+                            <button id="buttonRegister" type="submit" class="btn btn-primary .d-block">Register</button>
                         </div>
                     </form>
                 </div>
@@ -99,7 +99,6 @@
         </div>
     </div>
 </div>
-
 
 
 <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -136,7 +135,7 @@
                                    type="password" maxlength="20" minlength="3" required>
                         </div>
                         <div class="d-grid gap-2 col-6 mx-auto">
-                            <button type="submit" class="btn btn-primary .d-block" >Login</button>
+                            <button type="submit" class="btn btn-primary .d-block">Login</button>
                         </div>
                     </form>
                     <div>
@@ -148,8 +147,8 @@
 </div>
 
 <button id="buttonNewBoard" type="button" class="createBoard btn btn-primary " data-bs-toggle="modal"
-                data-bs-target="#newBoardModal">Create new board
-        </button>
+        data-bs-target="#newBoardModal">Create new board
+</button>
 
 
 <div class="modal fade" id="newBoardModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -174,7 +173,7 @@
                                    maxlength="50" required>
                         </div>
                         <div class="d-grid gap-2 col-6 mx-auto">
-                            <button type="submit" class="btn btn-primary .d-block" >Submit</button>
+                            <button type="submit" class="btn btn-primary .d-block">Submit</button>
                         </div>
                     </form>
                     <div>
@@ -186,11 +185,6 @@
 </div>
 
 
-
-
-
-
-
 <div class="modal fade" id="renameBoardModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content" id="renameBoardContent">
@@ -200,7 +194,7 @@
             </div>
             <div class="modal-body">
                 <div class="myFormRenameBoard">
-                    <form class="formRenameBoard" id="idFormRenameBoard">
+                    <form class="formRenameBoard" id="idFormRenameBoard" >
                         <div class="mb-3 mt-3">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                  class="bi bi-clipboard2-plus" viewBox="0 0 16 16">
@@ -210,10 +204,10 @@
                             </svg>
                             <label for="renameBoard" class="form-label">New Board title: </label>
                             <input id="renameBoard" class="form-control border-primary" name="renameBoard" type="text"
-                                   maxlength="50"  required >
+                                   maxlength="50" required>
                         </div>
                         <div class="d-grid gap-2 col-6 mx-auto">
-                            <button type="submit" class="btn btn-primary .d-block" >Submit</button>
+                            <button type="submit" class="btn btn-primary .d-block">Submit</button>
                         </div>
                     </form>
                     <div>
@@ -244,10 +238,10 @@
                             </svg>
                             <label for="addCardLabel" class="form-label">Card title: </label>
                             <input id="addCardLabel" class="form-control border-primary" name="renameBoard" type="text"
-                                   maxlength="50" required >
+                                   maxlength="50" required>
                         </div>
                         <div class="d-grid gap-2 col-6 mx-auto">
-                            <button type="submit" class="btn btn-primary .d-block" >Submit</button>
+                            <button type="submit" class="btn btn-primary .d-block">Submit</button>
                         </div>
                     </form>
                     <div>
@@ -257,7 +251,6 @@
         </div>
     </div>
 </div>
-
 
 
 <div class="modal fade" id="deleteBoardModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -281,7 +274,7 @@
 
                         </div>
                         <div class="d-grid gap-2 col-6 mx-auto">
-                            <button type="submit" class="btn btn-primary .d-block" >Submit</button>
+                            <button type="submit" class="btn btn-primary .d-block">Submit</button>
                         </div>
                     </form>
                     <div>
@@ -294,7 +287,86 @@
 
 
 
-<div id="root"></div>
+<div class="modal fade" id="renameStatusModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" id="renameStatusContent">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5 fw-bold" id="exampleModalLabel">Rename status</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="myFormRenameStatus">
+                    <form class="formRenameStatus" id="idFormRenameStatus">
+                        <div class="mb-3 mt-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="bi bi-clipboard2-plus" viewBox="0 0 16 16">
+                                <path d="M9.5 0a.5.5 0 0 1 .5.5.5.5 0 0 0 .5.5.5.5 0 0 1 .5.5V2a.5.5 0 0 1-.5.5h-5A.5.5 0 0 1 5 2v-.5a.5.5 0 0 1 .5-.5.5.5 0 0 0 .5-.5.5.5 0 0 1 .5-.5h3Z"/>
+                                <path d="M3 2.5a.5.5 0 0 1 .5-.5H4a.5.5 0 0 0 0-1h-.5A1.5 1.5 0 0 0 2 2.5v12A1.5 1.5 0 0 0 3.5 16h9a1.5 1.5 0 0 0 1.5-1.5v-12A1.5 1.5 0 0 0 12.5 1H12a.5.5 0 0 0 0 1h.5a.5.5 0 0 1 .5.5v12a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5v-12Z"/>
+                                <path d="M8.5 6.5a.5.5 0 0 0-1 0V8H6a.5.5 0 0 0 0 1h1.5v1.5a.5.5 0 0 0 1 0V9H10a.5.5 0 0 0 0-1H8.5V6.5Z"/>
+                            </svg>
+                            <label for="renameStatus" class="form-label">Status title: </label>
+                            <input id="renameStatus" class="form-control border-primary" name="renameStatus" type="text"
+                                   maxlength="50" required>
+                        </div>
+                        <div class="d-grid gap-2 col-6 mx-auto">
+                            <button type="submit" class="btn btn-primary .d-block">Submit</button>
+                        </div>
+                    </form>
+                    <div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade" id="addStatusModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" id="addStatusContent">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5 fw-bold" id="exampleModalLabel">Add status</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="myFormAddStatus">
+                    <form class="formAddStatus" id="idFormAddStatus" data-board-id>
+                        <div class="mb-3 mt-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="bi bi-clipboard2-plus" viewBox="0 0 16 16">
+                                <path d="M9.5 0a.5.5 0 0 1 .5.5.5.5 0 0 0 .5.5.5.5 0 0 1 .5.5V2a.5.5 0 0 1-.5.5h-5A.5.5 0 0 1 5 2v-.5a.5.5 0 0 1 .5-.5.5.5 0 0 0 .5-.5.5.5 0 0 1 .5-.5h3Z"/>
+                                <path d="M3 2.5a.5.5 0 0 1 .5-.5H4a.5.5 0 0 0 0-1h-.5A1.5 1.5 0 0 0 2 2.5v12A1.5 1.5 0 0 0 3.5 16h9a1.5 1.5 0 0 0 1.5-1.5v-12A1.5 1.5 0 0 0 12.5 1H12a.5.5 0 0 0 0 1h.5a.5.5 0 0 1 .5.5v12a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5v-12Z"/>
+                                <path d="M8.5 6.5a.5.5 0 0 0-1 0V8H6a.5.5 0 0 0 0 1h1.5v1.5a.5.5 0 0 0 1 0V9H10a.5.5 0 0 0 0-1H8.5V6.5Z"/>
+                            </svg>
+                            <label for="addStatus" class="form-label">Status title: </label>
+                            <input id="addStatus" class="form-control border-primary" name="addStatus" type="text"
+                                   maxlength="50" required>
+                        </div>
+                        <div class="d-grid gap-2 col-6 mx-auto">
+                            <button type="submit" class="btn btn-primary .d-block">Submit</button>
+                        </div>
+                    </form>
+                    <div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+<div id="root">
+
+</div>
+
 
 
 </body>

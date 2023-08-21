@@ -83,7 +83,7 @@ def get_board(board_id: int):
     return  boards_handler.get_board(board_id)
 
 
-@app.route("/api/new_board", methods= ["POST"])
+@app.route("/api/new_board", methods= ["PUT"])
 @json_response
 def create_new_board():
     data = request.json
@@ -109,16 +109,20 @@ def get_cards_for_board(board_id: int):
     return cards_handler.get_cards_for_board(board_id)
 
 
+
+
+
+
 @app.route("/api/boards/statuses/")
 @json_response
 def get_statuses():
     return status_handler.get_statuses()
 
 
-@app.route("/api/boards/statuses/<int:status_id>")
+@app.route("/api/boards/<int:board_id>/statuses/")
 @json_response
-def get_status(status_id):
-    return status_handler.get_card_status(status_id)
+def get_status_for(board_id: int):
+    return status_handler.get_card_status_for_board_id(board_id)
 
 
 @app.route("/api/boards/cards/<int:card_id>")
@@ -129,7 +133,7 @@ def get_card(card_id):
 
 @app.route("/api/delete_board/<int:board_id>", methods=["DELETE"])
 @json_response
-def delete_board(board_id):
+def delete_board(board_id: int):
     return boards_handler.delete_board_by_id(board_id)
 
 
@@ -144,7 +148,6 @@ def delete_card(card_id):
 def update_board(board_id:int):
     data = request.json
     boards_handler.update_board_by_id(board_id, data["renameBoard"])
-    # boards_handler.update_board_by_id(data["renameBoard"])
     return data
 
 
@@ -156,8 +159,28 @@ def update_card_title():
     return data
 
 
+@app.route("/api/update_status/<int:board_id>", methods=["PATCH"])
+@json_response
+def update_status_title(board_id:int):
+    data = request.json
+    status_handler.update_status(board_id,data["title"])
+    return data
 
 
+
+# @app.route("/api/add_status/<int:board_id>", methods=["PUT"])
+# @json_response
+# def add_status_title(board_id:int):
+#     data = request.json
+#     status_handler.add_status(board_id, data["addStatus"])
+#     return data
+
+@app.route("/api/boards/<int:board_id>/new_status", methods=["PUT"])
+@json_response
+def add_status_title(board_id: int):
+    data = request.json
+    status_handler.add_status(board_id, data["addStatus"])
+    return data
 
 def main():
     app.run(debug=True)

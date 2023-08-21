@@ -1,3 +1,16 @@
+#root{
+
+    width: 90%;
+
+    margin: auto;
+}
+
+.board{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+
 .accordion-body {
     height:400px;
 }
@@ -5,3 +18,43 @@
 #buttonNewBoard {
     margin: 20px;
   }
+
+.container {
+    margin: 10px 0 10px 0;
+
+
+ }
+
+
+#board-column-title{
+    font-weight: bold;
+    border: solid 1px black;
+    background: #93b5d7;
+
+    height: 300px;
+    margin: 10px 10px 20px 10px;
+    align-content: flex-start;
+    width: auto;
+}
+
+
+a{
+    color: black;
+}
+#board-column{
+    background-color: wheat;
+    display: flex;
+    height: 200px;
+    margin: 10px 0 20px 0;
+    align-content: flex-start;
+    width: auto;
+
+}
+
+.card{
+    width: 250px;
+    margin: 10px;
+    border: solid 1px black;
+}
+
+
