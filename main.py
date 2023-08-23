@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request, session, redirect
+from flask import Flask, render_template, url_for, request, jsonify, session
 import bcrypt as bcrypt
 from dotenv import load_dotenv
 from util import json_response
@@ -13,51 +13,57 @@ load_dotenv()
 app.secret_key = "96449384-97ca-4e24-bdec-58a7dc8f59fc"
 
 
-@app.route('/api/registration', methods=['POST'])
-@json_response
+@app.route('/api/users/', methods=['POST'])
 def registration():
     data = request.json
-    users_handler.add_user(data["userName"], data["email"],  data["passwordRegister"])
-    return data
+    user_name = data["userName"]
+    email = data["email"]
+    password = data["passwordRegister"]
+
+    if users_handler.get_user_by_name(user_name, email):
+        return jsonify(["User with this name or email already exists."]), 401
+
+    hashed_password = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
+    user_id = users_handler.add_user(user_name, email, hashed_password.decode("utf-8"))
+
+    if user_id:
+
+        return jsonify(["Registration successful."])
+    else:
+        return jsonify(["'Unknown error, please try again"]), 401
 
 
-@app.route('/login', methods=['POST'])
-@json_response
+@app.route('/api/login', methods=['POST'])
 def login():
     data = request.json
-    users_handler.get_user_by_name(data["userNameEmail"], data["passwordRegister"])
-    return data
-    # if request.method == 'GET':
-    #     return render_template("login.html")
-    # else:
-    #     user_name_email = request.form['user_name_email']
-    #     password = request.form['password']
-    #     errors = []
-    #     user = users_handler.get_user_by_name(user_name_email, user_name_email)
-    #     if not user:
-    #         errors.append(f'{user_name_email} not exist')
-    #         return render_template("login.html", errors=errors)
-    #
-    #     is_password_correct = bcrypt.checkpw(password.encode("utf-8"), user['password'].encode("utf-8"))
-    #
-    #     if is_password_correct:
-    #         session['user_name_email'] = user_name_email
-    #         session['is_logged'] = True
-    #         session['user_id'] = user['id']
-    #         # return redirect(f"/user/{user['id']}")
-    #         return redirect("/")
-    #     else:
-    #         return render_template("login.html", errors=['Password incorrect!'])
+    user_name_email = data["userNameEmail"]
+    password = data["passwordLogin"]
+
+    user = users_handler.get_user_by_name(user_name_email, user_name_email)
+
+    if not user:
+        response = jsonify(["User not found"]), 404
+        return response
+
+    is_password_correct = bcrypt.checkpw(password.encode("utf-8"), user['password'].encode("utf-8"))
+
+    if is_password_correct:
+        session["userNameEmail"] = user_name_email
+        session['is_logged'] = True
+        session['user_id'] = user['id']
+        return jsonify(["Login successful"])
+    else:
+        return jsonify(["Incorrect username/email or password."]), 404
 
 
-# def is_logged():
-#     return "is_logged" in session and session["is_logged"]
+def is_logged():
+    return "is_logged" in session and session["is_logged"]
 
 
-# @app.route('/logout', methods=['GET'])
-# def logout():
-#     session.clear()
-#     return redirect("/")
+@app.route('/api/logout', methods=['GET'])
+def logout():
+    session.clear()
+    return jsonify(["Logout"])
 
 
 @app.route("/")
@@ -80,10 +86,10 @@ def get_boards():
 @app.route("/api/boards/<int:board_id>")
 @json_response
 def get_board(board_id: int):
-    return  boards_handler.get_board(board_id)
+    return boards_handler.get_board(board_id)
 
 
-@app.route("/api/new_board", methods= ["PUT"])
+@app.route("/api/new_board", methods=["PUT"])
 @json_response
 def create_new_board():
     data = request.json
@@ -91,7 +97,7 @@ def create_new_board():
     return data
 
 
-@app.route("/api/new_card", methods= ["POST"])
+@app.route("/api/new_card", methods=["POST"])
 @json_response
 def create_new_cards():
     data = request.json
@@ -107,10 +113,6 @@ def get_cards_for_board(board_id: int):
     :param board_id: id of the parent board
     """
     return cards_handler.get_cards_for_board(board_id)
-
-
-
-
 
 
 @app.route("/api/boards/statuses/")
@@ -145,7 +147,7 @@ def delete_card(card_id):
 
 @app.route("/api/update_board/<int:board_id>", methods=["PATCH"])
 @json_response
-def update_board(board_id:int):
+def update_board(board_id: int):
     data = request.json
     boards_handler.update_board_by_id(board_id, data["renameBoard"])
     return data
@@ -155,17 +157,16 @@ def update_board(board_id:int):
 @json_response
 def update_card_title():
     data = request.json
-    cards_handler.update_card_title_by_id(data["card_id"],data["title"])
+    cards_handler.update_card_title_by_id(data["card_id"], data["title"])
     return data
 
 
 @app.route("/api/update_status/<int:board_id>", methods=["PATCH"])
 @json_response
-def update_status_title(board_id:int):
+def update_status_title(board_id: int):
     data = request.json
-    status_handler.update_status(board_id,data["title"])
+    status_handler.update_status(board_id, data["title"])
     return data
-
 
 
 # @app.route("/api/add_status/<int:board_id>", methods=["PUT"])
@@ -181,6 +182,7 @@ def add_status_title(board_id: int):
     data = request.json
     status_handler.add_status(board_id, data["addStatus"])
     return data
+
 
 def main():
     app.run(debug=True)

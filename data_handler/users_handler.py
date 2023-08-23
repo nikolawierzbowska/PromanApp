@@ -6,6 +6,7 @@ def get_user_by_name(cursor, user_name, email):
                    SELECT *
                    FROM users
                    WHERE  user_name = %(user_name)s or email = %(email)s    
+                  
                     """, {"user_name":user_name, "email":email})
     return cursor.fetchone()
 

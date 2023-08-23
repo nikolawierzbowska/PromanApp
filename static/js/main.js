@@ -8,6 +8,7 @@ function init() {
 
     registration()
     login()
+    logout()
 
 
 
@@ -25,7 +26,6 @@ function registration() {
 
         const formData = new FormData(formRegister);
         const data = Object.fromEntries(formData)
-        console.log(data)
 
         const isValid = validateRegisterForm()
 
@@ -41,8 +41,6 @@ function registration() {
             if (modalBackdrop) {
                 modalBackdrop.remove();
             }
-
-
         }
         else {
             return false
@@ -59,7 +57,6 @@ function validateRegisterForm() {
 
     if (userName.length < 6) {
         document.getElementById("messageUserName").innerHTML = "Length must be at least 6 characters"
-        console.log("user <5")
         return false
     }else {
         document.getElementById("messageUserName").innerHTML =""
@@ -80,8 +77,6 @@ function validateRegisterForm() {
         document.getElementById("messagePasswordRepeat").innerHTML =""
 
     }
-     // const numSaltRounds = 8;
-     //    bcrypt.hash(password, numSaltRounds)
     return true
 }
 
@@ -90,16 +85,37 @@ function validateRegisterForm() {
 function login() {
         const formLogin =document.querySelector('.formLogin');
         formLogin.addEventListener('submit', async event => {
+            event.preventDefault();
 
             const formData = new FormData(formLogin);
             const data = Object.fromEntries(formData)
-            console.log(data)
-            await dataHandler.getUser(data)
-            const myModal =document.getElementById('loginModal')
-            myModal.setAttribute('data-bs-dismiss',"modal")
-            event.preventDefault();
 
-        })
+            await dataHandler.postUser(data)
+
+            const myModal =document.getElementById('loginModal')
+            myModal.classList.remove('show');
+            myModal.style.display = 'none';
+            document.body.classList.remove('modal-open');
+            const modalBackdrop = document.querySelector('.modal-backdrop');
+            if (modalBackdrop) {
+                modalBackdrop.remove();
+            }
+
+        else {
+            return false
+        }
+    })
+}
+
+
+function logout() {
+    const logoutButton = document.querySelector('#logoutButton');
+    logoutButton.addEventListener('click', async event => {
+        event.preventDefault();
+
+        await dataHandler.logoutUser()
+
+    })
 
 }
 

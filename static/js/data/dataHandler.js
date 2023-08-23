@@ -1,15 +1,23 @@
 export let dataHandler = {
     createUser: async function (data) {
-        return await apiPost(`/api/registration`, data)
+        return await apiPost(`/api/users`, data)
     },
 
-    getUser: async function (data) {
+
+    postUser: async function (data) {
         return await apiPost(`/api/login`, data)
     },
+
+
+     logoutUser: async function () {
+        return await apiGet(`/api/logout`)
+    },
+
 
     getBoards: async function () {
         return await apiGet(`/api/boards`);
     },
+
     getBoard: async function (boardId) {
         return await apiGet(`/api/boards/${boardId}`);
         // the board is retrieved and then the callback function is called with the board

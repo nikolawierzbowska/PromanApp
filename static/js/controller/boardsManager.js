@@ -167,14 +167,12 @@ async function createNewStatus(clickEvent) {
 
 async function showHideButtonHandler(clickEvent) {
     const boardId = clickEvent.target.dataset.boardId;
-    const board = document.querySelector(`.board[data-board-id="${boardId}"]`)
     const cards = document.querySelectorAll(".card")
     const buttons = document.querySelectorAll(`.accordion-button[data-board-id="${boardId}"]`)
     for (let b of buttons) {
         if (b.getAttribute('aria-expanded') === "true" && boardId) {
 
             await cardsManager.loadCards(boardId)
-
 
         } else if (b.getAttribute('aria-expanded') === "false") {
             for (let card of cards) {
