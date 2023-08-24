@@ -10,7 +10,8 @@ export let cardsManager = {
             const cardBuilder = htmlFactory(htmlTemplates.card);
             const content = cardBuilder(card);
             console.log(content);
-            domManager.addChild(`.board[data-board-id="${boardId}"] .col`, content);
+            // domManager.addChild(`.board[data-board-id="${boardId}"] .col`, content);
+            domManager.addChild(`.board[data-board-id="${boardId}"]`, content);
             domManager.addEventListener(
                 `.card[data-card-id="${card.id}"]`,
                 "click",
@@ -19,6 +20,10 @@ export let cardsManager = {
         }
     },
 };
+
+
+
+
 
 function deleteButtonHandler(clickEvent) {
 }

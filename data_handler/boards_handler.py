@@ -10,18 +10,6 @@ def get_boards(cursor):
     return cursor.fetchall()
 
 
-# @connection.connection_handler
-# def get_boards(cursor):
-#     cursor.execute(
-#         """
-#         SELECT boards.id, boards.title, board_status.status_title
-#         from boards
-#         full join board_status
-#         on boards.id = board_status.board_id
-#         ;
-#         """)
-#     return cursor.fetchall()
-
 
 
 
@@ -43,11 +31,23 @@ def add_board(cursor, title):
         """
         INSERT INTO boards(title)
         VALUES (%(title)s)
-        RETURNING id;    
+        RETURNING id;
+            
         """, {"title": title})
+    new_board_id = cursor.fetchone()["id"]
 
 
-    return cursor.fetchone()["id"]
+    cursor.execute(
+        """
+        INSERT INTO board_status(board_id, status_id, status_title)
+        SELECT %(board_id)s, statuses.id, statuses.title
+        from boards
+        cross join statuses
+        WHERE boards.id = %(board_id)s
+        AND statuses.column_rec='1';
+            
+        """, {"board_id": new_board_id})
+
 
 
 @connection.connection_handler

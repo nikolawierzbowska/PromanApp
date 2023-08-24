@@ -1,13 +1,16 @@
 import connection
 
 @connection.connection_handler
-def get_card_status_for_board_id(cursor, board_id):
+def get_status_for_board_id(cursor, board_id):
     cursor.execute(
         """
-        SELECT statuses.id, statuses.title
+        SELECT statuses.id, statuses.title, statuses.column_rec, statuses.order_status, board_status.status_title
+    
         FROM statuses
         full join board_status on statuses.id = board_status.status_id
-        WHERE board_status.board_id = %(board_id)s;
+        WHERE board_status.board_id = %(board_id)s
+        order by order_status;
+        
         """
         , {"board_id": board_id})
     return cursor.fetchall()
@@ -17,7 +20,8 @@ def get_card_status_for_board_id(cursor, board_id):
 def get_statuses(cursor):
     cursor.execute(
         """
-        SELECT * FROM statuses;
+        SELECT * FROM statuses
+    
         """)
     return cursor.fetchall()
 
@@ -26,19 +30,39 @@ def get_statuses(cursor):
 def add_status(cursor, board_id, title):
     cursor.execute(
         """
-        INSERT INTO statuses(title)
-        VALUES (%(title)s);    
+        INSERT INTO statuses(title, column_rec, order_status)
+        VALUES (%(title)s, 0, 1 );    
+        """, {"board_id":board_id,
+            "title": title})
+
+    cursor.execute(
+        """
+        INSERT INTO board_status(board_id, status_id, status_title)
+        SELECT boards.id, statuses.id, statuses.title
+        from boards
+        join statuses on statuses.title = %(title)s
+        WHERE boards.id = %(board_id)s;
+            
         """, {"board_id":board_id,
             "title": title})
 
 
 
+
+
+
+
+
+
+
 @connection.connection_handler
-def update_status(cursor, board_id, title ):
+def update_status(cursor, board_id, status_id, title ):
     cursor.execute(
-        """
-        UPDATE statuses
-        SET title = %(title)s
+    """
+        UPDATE board_status
+        SET status_title = %(title)s
         WHERE board_id = %(board_id)s
+        AND status_id = %(status_id)s
         """, {"board_id":board_id,
-              "title" :title})
+              "title" :title,
+                "status_id":status_id})

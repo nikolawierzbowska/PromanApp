@@ -26,7 +26,7 @@
  }
 
 
-#board-column-title{
+.col{
     font-weight: bold;
     border: solid 1px black;
     background: #93b5d7;
@@ -38,18 +38,30 @@
 }
 
 
+  #logoutButton {
+        display: none;
+    }
+
+
+
+#message{
+    float: right;
+}
+
 a{
     color: black;
 }
-#board-column{
-    background-color: wheat;
-    display: flex;
-    height: 200px;
-    margin: 10px 0 20px 0;
-    align-content: flex-start;
-    width: auto;
 
-}
+
+/*#board-column{*/
+/*    background-color: wheat;*/
+/*    display: flex;*/
+/*    height: 200px;*/
+/*    margin: 10px 0 20px 0;*/
+/*    align-content: flex-start;*/
+/*    width: auto;*/
+
+/*}*/
 
 .card{
     width: 250px;

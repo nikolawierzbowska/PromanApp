@@ -1,49 +1,50 @@
 import {boardsManager} from "./controller/boardsManager.js";
 import {dataHandler} from "./data/dataHandler.js";
-
+import {domManager} from "./view/domManager.js";
 
 
 function init() {
-    boardsManager.loadBoards();
 
-    registration()
-    login()
+
+    addLoginFormListener()
+    addRegisterFormListener()
     logout()
-
-
-
-
+    boardsManager.loadBoards();
 }
+
 
 init();
 
 
-
-function registration() {
-    const formRegister =document.querySelector('.formRegister');
+function addRegisterFormListener() {
+    const errors = document.querySelector("#errors")
+    const formRegister = document.querySelector('.formRegister');
     formRegister.addEventListener('submit', async event => {
-          event.preventDefault();
+        event.preventDefault();
 
         const formData = new FormData(formRegister);
         const data = Object.fromEntries(formData)
-
         const isValid = validateRegisterForm()
 
-        if(isValid) {
-            await dataHandler.createUser(data);
-            formRegister.reset()
+        if (isValid) {
+            await dataHandler.createUser(data).then((response) => {
 
-            const myModal =document.getElementById('registerModal')
-            myModal.classList.remove('show');
-            myModal.style.display = 'none';
-            document.body.classList.remove('modal-open');
-            const modalBackdrop = document.querySelector('.modal-backdrop');
-            if (modalBackdrop) {
-                modalBackdrop.remove();
-            }
-        }
-        else {
-            return false
+                if (response.status === 200) {
+                    const myModal = document.getElementById('registerModal')
+                    formRegister.reset()
+                    myModal.classList.remove('show');
+                    myModal.style.display = 'none';
+                    document.body.classList.remove('modal-open');
+                    document.querySelector('.modal-backdrop').remove();
+                    document.getElementById('logoutButton').style.display = 'none';
+                    document.getElementById('registerButton').style.displayy = 'none';
+                    document.getElementById('loginButton').style.display= "block";
+                } else if (response.status === 404 || response.status === 401) {
+                    response.json()
+                    .then(data => errors.textContent = data)
+                }
+
+            })
         }
     })
 
@@ -58,64 +59,82 @@ function validateRegisterForm() {
     if (userName.length < 6) {
         document.getElementById("messageUserName").innerHTML = "Length must be at least 6 characters"
         return false
-    }else {
-        document.getElementById("messageUserName").innerHTML =""
+    } else {
+        document.getElementById("messageUserName").innerHTML = ""
     }
 
     if (password.length < 5) {
         document.getElementById("messagePassword").innerHTML = "Length must be at least 6 characters"
         return false
     } else {
-        document.getElementById("messagePassword").innerHTML =""
+        document.getElementById("messagePassword").innerHTML = ""
     }
 
     if (passwordRepeat !== password) {
-         document.getElementById("messagePasswordRepeat").innerHTML ="Passwords not match"
+        document.getElementById("messagePasswordRepeat").innerHTML = "Passwords not match"
         return false;
     } else {
 
-        document.getElementById("messagePasswordRepeat").innerHTML =""
+        document.getElementById("messagePasswordRepeat").innerHTML = ""
 
     }
     return true
 }
 
 
+function addLoginFormListener() {
+    const errors = document.querySelector("#errors")
+    const formLogin = document.querySelector('.formLogin');
+    formLogin.addEventListener('submit', async event => {
+        event.preventDefault();
 
-function login() {
-        const formLogin =document.querySelector('.formLogin');
-        formLogin.addEventListener('submit', async event => {
-            event.preventDefault();
+        const formData = new FormData(formLogin);
+        const data = Object.fromEntries(formData)
 
-            const formData = new FormData(formLogin);
-            const data = Object.fromEntries(formData)
-
-            await dataHandler.postUser(data)
-
-            const myModal =document.getElementById('loginModal')
-            myModal.classList.remove('show');
-            myModal.style.display = 'none';
-            document.body.classList.remove('modal-open');
-            const modalBackdrop = document.querySelector('.modal-backdrop');
-            if (modalBackdrop) {
-                modalBackdrop.remove();
+        await dataHandler.postUser(data).then((response) => {
+            console.log(response)
+            if (response.status === 200) {
+                const myModal = document.getElementById('loginModal')
+                formLogin.reset()
+                myModal.classList.remove('show');
+                myModal.style.display = 'none';
+                document.body.classList.remove('modal-open');
+                document.querySelector('.modal-backdrop').remove();
+                document.getElementById('logoutButton').style.display = 'block';
+                document.getElementById('registerButton').style.display= 'none';
+                document.getElementById('loginButton').style.display= "none";
+            } else if (response.status === 404 || response.status === 401) {
+                response.json()
+                .then(data => errors.textContent = data)
             }
 
-        else {
-            return false
-        }
+        })
     })
 }
 
 
 function logout() {
-    const logoutButton = document.querySelector('#logoutButton');
-    logoutButton.addEventListener('click', async event => {
+    const buttonLogOut = document.getElementById('logoutButton')
+    buttonLogOut.addEventListener("click", async event => {
         event.preventDefault();
 
-        await dataHandler.logoutUser()
-
+        await dataHandler.logoutUser().then((response) => {
+            console.log(response)
+            if (response.ok) {
+                document.getElementById('logoutButton').style.display = 'none';
+                document.getElementById('registerButton').style.display = 'none';
+                document.getElementById('loginButton').style.display = "block";
+            }
+        })
     })
 
 }
+
+
+
+
+
+
+
+
 

@@ -36,20 +36,12 @@ function boardBuilder(board) {
                                 <button type="button" id="deleteBoardButton" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#deleteBoardModal" data-board-id="${board.id}">Delete Board</button> 
                                 <button type="button" id="addStatusButton" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#addStatusModal" data-board-id="${board.id}">Add status</button> 
 
-                                  <div class="container text-center id=containerColumn">
-                                    <div class="row align-items-start">
+                                  <div class="container text-center id=containerColumn" data-board-id="${board.id}">
+                                    <div class="row align-items-start" data-board-id="${board.id}">
+                                    <a data-bs-toggle="modal" data-bs-target="#renameStatusModal" data-board-id="${board.id}" href="#renameStatusModal">
                                         
-                                   
-                                      
-                                           ${board.statuses.map(status => `
-                                          <div class="col" id="board-column-title">
-                                            <a data-bs-toggle="modal" data-bs-target="#renameStatusModal" data-status="${status.id}" data-board-id="${board.id}" href="#renameStatusModal">
-                                              ${status.title}
-                                            </a>
-                                          </div>`).join("")} 
-    
-    
-                                                   
+                                    
+                                           
                                      
                                     </div>    
                                   </div> 

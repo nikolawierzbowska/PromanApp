@@ -1,21 +1,43 @@
 export let dataHandler = {
     createUser: async function (data) {
-        return await apiPost(`/api/users`, data)
+        return await fetch(`/api/users`, {
+            method: "POST",
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
     },
 
 
     postUser: async function (data) {
-        return await apiPost(`/api/login`, data)
+        return await fetch(`/api/users/login`, {
+            method: "POST",
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        });
     },
 
 
-     logoutUser: async function () {
-        return await apiGet(`/api/logout`)
+    logoutUser: async function () {
+        return await fetch(`/api/users/logout`, {
+            method: "GET",
+        })
     },
 
 
     getBoards: async function () {
         return await apiGet(`/api/boards`);
+    },
+
+
+    getStatusesFor: async function (boardId) {
+        return await apiGet(`/api/boards/${boardId}/statuses`)
+        // the statuses are retrieved and then the callback function is called with the statuses
     },
 
     getBoard: async function (boardId) {
@@ -27,10 +49,7 @@ export let dataHandler = {
         // the statuses are retrieved and then the callback function is called with the statuses
     },
 
-    getStatusesFor: async function (boardId) {
-        return await apiGet(`/api/boards/${boardId}/statuses`)
-    // the statuses are retrieved and then the callback function is called with the statuses
-    },
+
 
     getStatus: async function (statusId) {
         return await apiGet(`/api/boards/statuses/${statusId}`)
@@ -66,8 +85,8 @@ export let dataHandler = {
     createNewStatus: async function (boardId, statusTitle) {
         return await apiPut(`/api/boards/${boardId}/new_status`, statusTitle)
     },
-    updateStatus: async function (boardId, statusTitle) {
-        return await apiPatch(`/api/boards/${boardId}/update_status/`, statusTitle)
+    updateStatus: async function (boardId,statusId, statusTitle) {
+        return await apiPut(`/api/boards/${boardId}/update_status/${statusId}`, statusTitle)
     },
 
 

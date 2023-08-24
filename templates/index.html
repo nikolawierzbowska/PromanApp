@@ -13,26 +13,37 @@
             crossorigin="anonymous"></script>
 
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
-    <script type="module" src="/static/js/main.js" defer></script>
+    <script type="module" src="{{ url_for('static', filename='js/main.js') }}" defer></script>
 </head>
 
 
 <nav class="navbar navbar-expand-lg bg-primary">
+
     <div class="container-fluid">
-              <button type="button" id="logoutButton" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#logoutModal">
+
+        <button type="button" id="logoutButton" class="btn btn-primary" data-bs-toggle="modal"
+                data-bs-target="#logoutModal">
             LOGOUT
         </button>
-         <button type="button" id="registerButton" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#registerModal">
+
+        <button type="button" id="registerButton" class="btn btn-primary " data-bs-toggle="modal"
+                data-bs-target="#registerModal">
             REGISTRATION
         </button>
-        <button type="button" id="loginButton" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#loginModal">
+        <button type="button" id="loginButton" class="btn btn-primary" data-bs-toggle="modal"
+                data-bs-target="#loginModal">
             LOGIN
         </button>
 
     </div>
+
 </nav>
 
 <body>
+
+
+<div id="message" style="color: darkgreen"></div>
+
 <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content" id="registration">
@@ -42,13 +53,18 @@
             </div>
             <div class="modal-body">
                 <div class="myFormRegistration">
-                    <form class="formRegister" >
+                    <form class="formRegister">
                         <div class="mb-3 mt-3">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                  class="bi bi-person-bounding-box" viewBox="0 0 16 16">
                                 <path d="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1h-3zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5zM.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5zm15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5z"/>
                                 <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
                             </svg>
+
+                            <p id="errors" style="color: red">
+
+                            </p>
+
 
                             <label for="userName" class="form-label">User name: </label>
                             <input id="userName" class="form-control border-primary" name="userName" type="text"
@@ -111,13 +127,16 @@
             </div>
             <div class="modal-body">
                 <div class="myFormLogin">
-                    <form class="formLogin" >
+                    <form class="formLogin">
                         <div class="mb-3 mt-3">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                  class="bi bi-person-bounding-box" viewBox="0 0 16 16">
                                 <path d="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1h-3zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5zM.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5zm15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5z"/>
                                 <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
                             </svg>
+
+                            <p id="errors" style="color: red">
+                                                           </p>
                             <label for="userNameEmail" class="form-label">User name or email:
                             </label><br>
                             <input id="userNameEmail" class="form-control border-primary" name="userNameEmail"
@@ -195,7 +214,7 @@
             </div>
             <div class="modal-body">
                 <div class="myFormRenameBoard">
-                    <form class="formRenameBoard" id="idFormRenameBoard" >
+                    <form class="formRenameBoard" id="idFormRenameBoard">
                         <div class="mb-3 mt-3">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                  class="bi bi-clipboard2-plus" viewBox="0 0 16 16">
@@ -287,7 +306,6 @@
 </div>
 
 
-
 <div class="modal fade" id="renameStatusModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content" id="renameStatusContent">
@@ -320,8 +338,6 @@
         </div>
     </div>
 </div>
-
-
 
 
 <div class="modal fade" id="addStatusModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -358,16 +374,9 @@
 </div>
 
 
-
-
-
-
-
-
 <div id="root">
 
 </div>
-
 
 
 </body>

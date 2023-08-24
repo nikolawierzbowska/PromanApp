@@ -28,12 +28,12 @@ def registration():
 
     if user_id:
 
-        return jsonify(["Registration successful."])
+        return jsonify(["Registration successful."]),200
     else:
         return jsonify(["'Unknown error, please try again"]), 401
 
 
-@app.route('/api/login', methods=['POST'])
+@app.route('/api/users/login', methods=['POST'])
 def login():
     data = request.json
     user_name_email = data["userNameEmail"]
@@ -42,8 +42,8 @@ def login():
     user = users_handler.get_user_by_name(user_name_email, user_name_email)
 
     if not user:
-        response = jsonify(["User not found"]), 404
-        return response
+       return jsonify(["User not found"]), 404
+
 
     is_password_correct = bcrypt.checkpw(password.encode("utf-8"), user['password'].encode("utf-8"))
 
@@ -51,7 +51,7 @@ def login():
         session["userNameEmail"] = user_name_email
         session['is_logged'] = True
         session['user_id'] = user['id']
-        return jsonify(["Login successful"])
+        return jsonify(["Login successful"]), 200
     else:
         return jsonify(["Incorrect username/email or password."]), 404
 
@@ -60,17 +60,19 @@ def is_logged():
     return "is_logged" in session and session["is_logged"]
 
 
-@app.route('/api/logout', methods=['GET'])
+@app.route('/api/users/logout', methods=['GET'])
 def logout():
     session.clear()
-    return jsonify(["Logout"])
+    return jsonify(["Logout"]),200
 
 
 @app.route("/")
 def index():
     """
     This is a one-pager which shows all the boards and cards
+
     """
+
     return render_template('index.html')
 
 
@@ -124,7 +126,7 @@ def get_statuses():
 @app.route("/api/boards/<int:board_id>/statuses/")
 @json_response
 def get_status_for(board_id: int):
-    return status_handler.get_card_status_for_board_id(board_id)
+    return status_handler.get_status_for_board_id(board_id)
 
 
 @app.route("/api/boards/cards/<int:card_id>")
@@ -161,11 +163,11 @@ def update_card_title():
     return data
 
 
-@app.route("/api/update_status/<int:board_id>", methods=["PATCH"])
+@app.route("/api/boards/<int:board_id>/update_status/<int:status_id>/", methods=["PUT"])
 @json_response
-def update_status_title(board_id: int):
+def update_status_title(board_id: int, status_id :int):
     data = request.json
-    status_handler.update_status(board_id, data["title"])
+    status_handler.update_status(board_id,status_id, data["title"])
     return data
 
 
@@ -180,8 +182,8 @@ def update_status_title(board_id: int):
 @json_response
 def add_status_title(board_id: int):
     data = request.json
-    status_handler.add_status(board_id, data["addStatus"])
-    return data
+
+    return status_handler.add_status(board_id, data["addStatus"])
 
 
 def main():
