@@ -94,8 +94,8 @@ def delete_column(cursor,board_id,status_id):
     cursor.execute(
         """
         DELETE FROM board_status
-        WHERE status_id = %(status_id)s
-        AND board_id = %(board_id)s
+        WHERE board_id = %(board_id)s
+        AND status_id = %(status_id)s
         """, {"board_id":board_id,
-              "status_id": status_id,
+              "status_id": status_id
               })

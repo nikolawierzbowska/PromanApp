@@ -127,7 +127,7 @@ def delete_board(board_id: int):
     return boards_handler.delete_board_by_id(board_id)
 
 
-@app.route("/api/boards/<int:board_id>/<int:status_id>", methods=["DELETE"])
+@app.route("/api/boards/<int:board_id>/delete_column/<int:status_id>", methods=["DELETE"])
 @json_response
 def delete_column(board_id: int, status_id: int):
     return status_handler.delete_column(board_id, status_id)

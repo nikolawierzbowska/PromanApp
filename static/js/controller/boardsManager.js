@@ -39,10 +39,11 @@ export let boardsManager = {
                 createNewStatus
             );
 
-                // domManager.addEventListener(
-                // `.buttonDel[data-board-id="${board.id}"][data-status-id="${statusId}`,
-                // "click",
-                // deleteColumn);
+
+            // domManager.addEventListener(
+            //     `button .buttonTitleColumn[data-board-id="${board.id}"][data-status-id]`,
+            //     "click",
+            //     renameStatus );
 
         }
         createNewBoard()
@@ -58,7 +59,6 @@ export let boardsManager = {
 // }
 
 
-
 async function loadStatus(boardId) {
     const statuses = await dataHandler.getStatusesForBoard(boardId)
     const board = await dataHandler.getBoard(boardId)
@@ -70,7 +70,7 @@ async function loadStatus(boardId) {
         const div = document.createElement("div")
         div.classList.add("col")
         const icon = '\u2715'
-        const deleteButton = document.createElement("span")
+        const deleteButton = document.createElement("button")
         deleteButton.setAttribute(`data-board-id`, boardId)
         deleteButton.setAttribute(`data-status-id`, item.id)
         deleteButton.classList.add("buttonDel")
@@ -86,6 +86,9 @@ async function loadStatus(boardId) {
 
 
         const button = document.createElement("button");
+
+
+        button.classList.add("buttonTitleColumn")
         button.setAttribute("id", item.title)
         button.setAttribute("data-bs-toggle", "modal");
         button.setAttribute("data-bs-target", "#renameStatusModal");
@@ -98,6 +101,19 @@ async function loadStatus(boardId) {
         headerDiv.appendChild(button)
         div.appendChild(headerDiv)
         column.appendChild(div);
+
+        domManager.addEventListener(
+            `.buttonTitleColumn[data-board-id="${board.id}"][data-status-id="${item.id}"]`,
+            "click",
+            renameStatus
+        );
+
+
+        domManager.addEventListener(
+            `.buttonDel[data-board-id="${board.id}"][data-status-id="${item.id}"]`,
+            "click",
+            deleteColumnId
+        );
 
 
     })
@@ -161,30 +177,30 @@ async function deleteBoard(clickEvent) {
 
 async function renameStatus(clickEvent) {
     const boardId = clickEvent.target.dataset.boardId
+    const statusId = clickEvent.target.dataset.statusId
 
-    const statuses = await dataHandler.getStatusesForBoard(boardId)
-    for (let status of statuses) {
-        const statusId = status.id
+    const formRenameStatus = document.querySelector('.formRenameStatus')
+    formRenameStatus.addEventListener("submit", async event => {
+        event.preventDefault()
+        const formData = new FormData(formRenameStatus);
+        const data = Object.fromEntries(formData)
 
-        const formRenameStatus = document.querySelector('.formRenameStatus')
-        formRenameStatus.addEventListener("submit", async event => {
-            event.preventDefault()
-            const formData = new FormData(formRenameStatus);
-            const data = Object.fromEntries(formData)
+        await dataHandler.updateStatus(boardId, statusId, data).then((response) => {
+            console.log(response.status)
+            if (response.status === 200) {
+                const myModal = document.getElementById('renameStatusModal')
+                const modalBootstrap = new bootstrap.Modal(myModal)
+                modalBootstrap.hide()
 
-            await dataHandler.updateStatus(boardId, statusId, data).then((response) => {
+            } else {
                 console.log(response.status)
-                if (response.status === 200) {
-                    const myModal = document.getElementById('renameStatusModal')
-                    const modalBootstrap = new bootstrap.Modal(myModal)
-                    modalBootstrap.hide()
+            }
+        })
+        location.reload()
+    });
 
-                } else {
-                    console.log(response.status)
-                }
-            })
-        });
-    }
+
+    // }
 
 }
 
@@ -238,16 +254,12 @@ async function showHideButtonHandler(clickEvent) {
 }
 
 
-
-
-async function deleteColumn(clickEvent) {
-     const statusId = clickEvent.target.dataset.statusId;
-     const boardId = clickEvent.target.dataset.boardId
-     await dataHandler.deleteColumn(boardId, statusId)
-     location.reload()
-
-
-
-
+async function deleteColumnId(clickEvent) {
+    const statusId = clickEvent.target.dataset.statusId;
+    console.log(statusId)
+    const boardId = clickEvent.target.dataset.boardId
+    console.log(boardId)
+    await dataHandler.deleteColumn(boardId, statusId)
+    location.reload()
 
 }
