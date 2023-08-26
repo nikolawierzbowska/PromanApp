@@ -28,7 +28,7 @@ def registration():
 
     if user_id:
 
-        return jsonify(["Registration successful."]),200
+        return jsonify(["Registration successful."]), 200
     else:
         return jsonify(["'Unknown error, please try again"]), 401
 
@@ -42,8 +42,7 @@ def login():
     user = users_handler.get_user_by_name(user_name_email, user_name_email)
 
     if not user:
-       return jsonify(["User not found"]), 404
-
+        return jsonify(["User not found"]), 404
 
     is_password_correct = bcrypt.checkpw(password.encode("utf-8"), user['password'].encode("utf-8"))
 
@@ -63,25 +62,17 @@ def is_logged():
 @app.route('/api/users/logout', methods=['GET'])
 def logout():
     session.clear()
-    return jsonify(["Logout"]),200
+    return jsonify(["Logout"]), 200
 
 
 @app.route("/")
 def index():
-    """
-    This is a one-pager which shows all the boards and cards
-
-    """
-
     return render_template('index.html')
 
 
 @app.route("/api/boards")
 @json_response
 def get_boards():
-    """
-    All the boards
-    """
     return boards_handler.get_boards()
 
 
@@ -99,34 +90,29 @@ def create_new_board():
     return data
 
 
-@app.route("/api/new_card", methods=["POST"])
+@app.route("/api/boards/<int:board_id>/cards/statuses/<int:status_id>", methods=["POST"])
 @json_response
-def create_new_cards():
+def create_new_cards(board_id: int, status_id: int):
     data = request.json
-    cards_handler.add_card(data["board_id"], data["status_id"], data["title"])
-    return data
+    return cards_handler.add_card(board_id, status_id, data["addCardTitle"])
 
 
 @app.route("/api/boards/<int:board_id>/cards/")
 @json_response
 def get_cards_for_board(board_id: int):
-    """
-    All cards that belongs to a board
-    :param board_id: id of the parent board
-    """
     return cards_handler.get_cards_for_board(board_id)
 
 
-@app.route("/api/boards/statuses/")
+@app.route("/api/boards/<int:board_id>/statuses/<int:status_id>")
 @json_response
-def get_statuses():
-    return status_handler.get_statuses()
+def get_status(board_id:int, status_id:int):
+    return status_handler.get_status(board_id, status_id)
 
 
 @app.route("/api/boards/<int:board_id>/statuses/")
 @json_response
-def get_status_for(board_id: int):
-    return status_handler.get_status_for_board_id(board_id)
+def get_statuses_for_board(board_id: int):
+    return status_handler.get_statuses_for_board_id(board_id)
 
 
 @app.route("/api/boards/cards/<int:card_id>")
@@ -139,6 +125,12 @@ def get_card(card_id):
 @json_response
 def delete_board(board_id: int):
     return boards_handler.delete_board_by_id(board_id)
+
+
+@app.route("/api/boards/<int:board_id>/<int:status_id>", methods=["DELETE"])
+@json_response
+def delete_column(board_id: int, status_id: int):
+    return status_handler.delete_column(board_id, status_id)
 
 
 @app.route("/api/delete_card/<int:card_id>", methods=["DELETE"])
@@ -163,24 +155,18 @@ def update_card_title():
     return data
 
 
-@app.route("/api/boards/<int:board_id>/update_status/<int:status_id>/", methods=["PUT"])
+@app.route("/api/boards/<int:board_id>/update_status/<int:status_id>", methods=["POST"])
 @json_response
-def update_status_title(board_id: int, status_id :int):
+def update_status_title(board_id: int, status_id: int):
     data = request.json
-    status_handler.update_status(board_id,status_id, data["title"])
-    return data
+
+    return status_handler.update_status(board_id, status_id, data["renameStatus"])
 
 
-# @app.route("/api/add_status/<int:board_id>", methods=["PUT"])
-# @json_response
-# def add_status_title(board_id:int):
-#     data = request.json
-#     status_handler.add_status(board_id, data["addStatus"])
-#     return data
 
-@app.route("/api/boards/<int:board_id>/new_status", methods=["PUT"])
+@app.route("/api/boards/<int:board_id>/new_status/", methods=["PUT"])
 @json_response
-def add_status_title(board_id: int):
+def add_status_title(board_id:int):
     data = request.json
 
     return status_handler.add_status(board_id, data["addStatus"])

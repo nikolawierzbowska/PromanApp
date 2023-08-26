@@ -1,7 +1,7 @@
 import connection
 
 @connection.connection_handler
-def get_status_for_board_id(cursor, board_id):
+def get_statuses_for_board_id(cursor, board_id):
     cursor.execute(
         """
         SELECT statuses.id, statuses.title, statuses.column_rec, statuses.order_status, board_status.status_title
@@ -16,14 +16,39 @@ def get_status_for_board_id(cursor, board_id):
     return cursor.fetchall()
 
 
+
 @connection.connection_handler
-def get_statuses(cursor):
+def get_status(cursor, board_id, status_id):
     cursor.execute(
         """
-        SELECT * FROM statuses
+        SELECT board_status.status_title, statuses.order_status,board_status.status_id
+        FROM statuses
+        full join board_status on statuses.id = board_status.status_id
+        WHERE board_status.board_id = %(board_id)s 
+        and board_status.status_id= %(status_id)s
     
-        """)
-    return cursor.fetchall()
+        """, {"board_id":board_id,
+              "status_id":status_id})
+    return cursor.fetchone()
+
+
+# @connection.connection_handler
+# def get_statusId(cursor, board_id, title):
+#     cursor.execute(
+#         """
+#         SELECT statuses.id
+#         FROM statuses
+#         full join board_status on statuses.id = board_status.status_id
+#         WHERE board_status.board_id = %(board_id)s
+#         and board_status.status_title = %(title)s
+#
+#         """, {"board_id": board_id,
+#               "title": title})
+#     return cursor.fetchone()
+#
+
+
+
 
 
 @connection.connection_handler
@@ -50,19 +75,27 @@ def add_status(cursor, board_id, title):
 
 
 
-
-
+@connection.connection_handler
+def update_status(cursor, board_id, status_id, status_title ):
+    cursor.execute(
+    """
+        UPDATE board_status
+        SET status_title = %(status_title)s
+        WHERE board_id = %(board_id)s
+        AND status_id = %(status_id)s
+        """, {"board_id":board_id,
+              "status_id": status_id,
+              "status_title" :status_title})
 
 
 
 @connection.connection_handler
-def update_status(cursor, board_id, status_id, title ):
+def delete_column(cursor,board_id,status_id):
     cursor.execute(
-    """
-        UPDATE board_status
-        SET status_title = %(title)s
-        WHERE board_id = %(board_id)s
-        AND status_id = %(status_id)s
+        """
+        DELETE FROM board_status
+        WHERE status_id = %(status_id)s
+        AND board_id = %(board_id)s
         """, {"board_id":board_id,
-              "title" :title,
-                "status_id":status_id})
+              "status_id": status_id,
+              })

@@ -59,6 +59,8 @@ def delete_board_by_id(cursor, board_id):
         """, {"board_id": board_id})
 
 
+
+
 @connection.connection_handler
 def update_board_by_id(cursor, board_id, title):
     cursor.execute(

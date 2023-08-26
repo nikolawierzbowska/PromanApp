@@ -9,6 +9,7 @@ function init() {
     addLoginFormListener()
     addRegisterFormListener()
     logout()
+
     boardsManager.loadBoards();
 }
 

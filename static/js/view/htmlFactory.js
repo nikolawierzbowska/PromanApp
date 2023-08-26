@@ -38,8 +38,7 @@ function boardBuilder(board) {
 
                                   <div class="container text-center id=containerColumn" data-board-id="${board.id}">
                                     <div class="row align-items-start" data-board-id="${board.id}">
-                                    <a data-bs-toggle="modal" data-bs-target="#renameStatusModal" data-board-id="${board.id}" href="#renameStatusModal">
-                                        
+                                  
                                     
                                            
                                      

@@ -11,6 +11,7 @@
 }
 
 
+
 .accordion-body {
     height:400px;
 }
@@ -29,7 +30,8 @@
 .col{
     font-weight: bold;
     border: solid 1px black;
-    background: #93b5d7;
+    background-color: #c9d0de;
+    padding: 0;
 
     height: 300px;
     margin: 10px 10px 20px 10px;
@@ -70,3 +72,27 @@ a{
 }
 
 
+.headerTitle > a {
+    text-decoration: none;
+
+}
+.headerTitle > button:hover {
+    font-weight: bolder;
+    font-size: larger;
+    cursor: pointer;
+}
+
+.buttonDel {
+    /*background: grey;*/
+    height: 25px;
+    border: solid 1px black ;
+    width: 25px ;
+    font-weight: bolder;
+     float: right;
+    margin: 0;
+}
+
+button {
+    background-color: transparent;
+    border: none;
+}

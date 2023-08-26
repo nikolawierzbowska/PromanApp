@@ -28,7 +28,7 @@ def add_card(cursor, board_id, status_id, title):
     cursor.execute(
         """
         INSERT INTO cards(board_id, status_id, title, card_order)
-        VALUES (%(board_id)s, %(status_id)s, %(title)s, 1);    
+        VALUES (%(board_id)s, %(status_id)s , %(title)s, 1);    
         """, {"board_id":board_id,
               "status_id":status_id,
               "title": title})
