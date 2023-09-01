@@ -8,15 +8,19 @@ export let cardsManager = {
         for (let card of cards) {
 
             const cardBuilder = htmlFactory(htmlTemplates.card);
-
             const content = cardBuilder(card);
-
 
             domManager.addChild(`.board[data-board-id="${boardId}"] .col`, content);
             domManager.addEventListener(
-                `.card[data-card-id="${card.id}"]`,
+                `.buttonDelCard[data-card-id="${card.id}"]`,
                 "click",
                 deleteButtonHandler
+            );
+
+            domManager.addEventListener(
+                `.buttonTitleCard[data-card-id="${card.id}"]`,
+                "click",
+                renameCardTitle
             );
 
 
@@ -24,15 +28,18 @@ export let cardsManager = {
          domManager.addEventListener(
                 `#addCardButton[data-board-id="${boardId}"]`,
                 "click",
-                createNewCard(boardId)
+                createNewCard
             );
+
+
 
     },
 };
 
 
-async function createNewCard(boardId) {
+async function createNewCard(clickEvent) {
 const statusId = 1
+    const boardId = clickEvent.target.dataset.boardId
     const formAddCard = document.querySelector(`.formAddCard`)
     formAddCard.addEventListener("submit", async event => {
         event.preventDefault();
@@ -53,12 +60,39 @@ const statusId = 1
 
 
 
+async function deleteButtonHandler(clickEvent) {
+    const cardId = clickEvent.target.dataset.cardId;
+    await dataHandler.deleteCard(cardId)
+    location.reload()
 
-
-
-
-
-function deleteButtonHandler(clickEvent) {
 }
 
+
+async function renameCardTitle(clickEvent) {
+    const cardId = clickEvent.target.dataset.boardId
+
+
+    const formRenameStatus = document.querySelector('.formRenameStatus')
+    formRenameStatus.addEventListener("submit", async event => {
+        event.preventDefault()
+        const formData = new FormData(formRenameStatus);
+        const data = Object.fromEntries(formData)
+
+        await dataHandler.updateStatus(boardId, statusId, data).then((response) => {
+            console.log(response.status)
+            if (response.status === 200) {
+                const myModal = document.getElementById('renameStatusModal')
+                const modalBootstrap = new bootstrap.Modal(myModal)
+                modalBootstrap.hide()
+
+            } else {
+                console.log(response.status)
+            }
+        })
+        location.reload()
+    });
+
+
+
+}
 

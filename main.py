@@ -135,7 +135,7 @@ def delete_column(board_id: int, status_id: int):
 
 @app.route("/api/delete_card/<int:card_id>", methods=["DELETE"])
 @json_response
-def delete_card(card_id):
+def delete_card(card_id:int):
     return cards_handler.delete_card_by_id(card_id)
 
 
@@ -147,12 +147,12 @@ def update_board(board_id: int):
     return data
 
 
-@app.route("/api/update_card/", methods=["PATCH"])
+@app.route("/api/update_card/<int:card_id>", methods=["PATCH"])
 @json_response
-def update_card_title():
+def update_card_title(card_id: int):
     data = request.json
-    cards_handler.update_card_title_by_id(data["card_id"], data["title"])
-    return data
+    return cards_handler.update_card_title_by_id(card_id, data["title"])
+
 
 
 @app.route("/api/boards/<int:board_id>/update_status/<int:status_id>", methods=["POST"])

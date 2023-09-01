@@ -55,7 +55,12 @@ function boardBuilder(board) {
 
 
 function cardBuilder(card) {
-    return `<div class="card" data-card-id="${card.id}" data-card-status="${card.status_id}">${card.title}</div>`;
+    return `<div class="card" data-card-id="${card.id}" data-card-status="${card.status_id}">
+            <button class="buttonTitleCard" data-card-id="${card.id}">${card.title} </button>
+
+   <div class="buttonDelCard"  data-card-id="${card.id}">\u2715</div>
+
+</div>`;
 }
 
 

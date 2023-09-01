@@ -99,3 +99,11 @@ def delete_column(cursor,board_id,status_id):
         """, {"board_id":board_id,
               "status_id": status_id
               })
+
+    cursor.execute(
+        """
+        DELETE FROM statuses
+        WHERE id =%(status_id)s
+         and column_rec= 0
+        """, {"status_id": status_id
+              })

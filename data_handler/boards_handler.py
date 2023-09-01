@@ -58,6 +58,16 @@ def delete_board_by_id(cursor, board_id):
         WHERE id = %(board_id)s
         """, {"board_id": board_id})
 
+    cursor.execute(
+        """
+        DELETE FROM statuses
+        WHERE column_rec = 0
+        AND id NOT IN (
+            SELECT status_id
+            FROM board_status)
+
+        """)
+
 
 
 
