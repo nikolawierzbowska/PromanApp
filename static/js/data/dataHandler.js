@@ -46,19 +46,11 @@ export let dataHandler = {
     },
 
 
-    // getStatuses: async function () {
-    //     return await apiGet(`/api/boards/statuses`)
-    //     // the statuses are retrieved and then the callback function is called with the statuses
-    // },
-
 
     getStatus: async function (boardId, statusId) {
         return await apiGet(`/api/boards/${boardId}/statuses/${statusId}`)
 
     },
-
-
-
 
 
     getCardsByBoardId: async function (boardId) {
@@ -86,7 +78,7 @@ export let dataHandler = {
 
 
     deleteColumn: async function (boardId, statusId) {
-     return await apiDelete(`/api/boards/${boardId}/delete_column/${statusId}`)
+        return await apiDelete(`/api/boards/${boardId}/delete_column/${statusId}`)
     },
 
 
@@ -101,26 +93,37 @@ export let dataHandler = {
 
 
     updateCard: async function (cardId, cardTitle) {
-        return await apiPatch(`/api/delete_card/${cardId}`, cardTitle)
-    },
-
-    createNewStatus: async function (boardId, statusTitle) {
-        return await apiPut(`/api/boards/${boardId}/new_status`, statusTitle)
-    },
-
-
-    updateStatus: async function (boardId, statusId, statusTitle) {
-        return await fetch(`/api/boards/${boardId}/update_status/${statusId}`, {
+        return await fetch(`/api/update_card/${cardId}`, {
             method: "POST",
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(statusTitle),
+            body: JSON.stringify(cardTitle),
         })
     },
 
-};
+
+createNewStatus: async function (boardId, statusTitle) {
+    return await apiPut(`/api/boards/${boardId}/new_status`, statusTitle)
+}
+,
+
+
+updateStatus: async function (boardId, statusId, statusTitle) {
+    return await fetch(`/api/boards/${boardId}/update_status/${statusId}`, {
+        method: "POST",
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(statusTitle),
+    })
+}
+,
+
+}
+;
 
 
 async function apiGet(url) {

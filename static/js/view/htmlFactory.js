@@ -39,9 +39,7 @@ function boardBuilder(board) {
                                   <div class="container text-center id=containerColumn" data-board-id="${board.id}">
                                     <div class="row align-items-start" data-board-id="${board.id}">
                                   
-                                    
-                                           
-                                     
+                                                                     
                                     </div>    
                                   </div> 
                             </div>
@@ -55,12 +53,15 @@ function boardBuilder(board) {
 
 
 function cardBuilder(card) {
-    return `<div class="card" data-card-id="${card.id}" data-card-status="${card.status_id}">
-            <button class="buttonTitleCard" data-card-id="${card.id}">${card.title} </button>
-
-   <div class="buttonDelCard"  data-card-id="${card.id}">\u2715</div>
-
-</div>`;
+    return `<div class="card" data-card-id="${card.id}" data-card-status="${card.status_id}" draggable="true">
+                <div>
+                    <button class="buttonTitleCard" data-card-id="${card.id}" data-bs-toggle="modal" data-bs-target="#renameCardModal">${card.title} </button>
+                </div>
+                <div>
+                    <button class="buttonDelCard"  data-card-id="${card.id}">\u2715</button>
+                </div>
+ 
+            </div>`;
 }
 
 

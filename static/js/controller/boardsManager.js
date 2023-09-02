@@ -63,12 +63,12 @@ async function loadStatus(boardId) {
     const statuses = await dataHandler.getStatusesForBoard(boardId)
     const board = await dataHandler.getBoard(boardId)
 
-
     const column = document.querySelector(`.row[data-board-id="${board.id}"]`)
     column.innerHTML = ''
     statuses.forEach(item => {
         const div = document.createElement("div")
         div.classList.add("col")
+        div.setAttribute(`data-status-id`, item.id)
         const icon = '\u2715'
         const deleteButton = document.createElement("button")
         deleteButton.setAttribute(`data-board-id`, boardId)
@@ -76,8 +76,7 @@ async function loadStatus(boardId) {
         deleteButton.classList.add("buttonDel")
         deleteButton.innerText = icon;
         div.appendChild(deleteButton)
-        // div.setAttribute(`id`, item.status_title)
-        // div.setAttribute(`order`, item.order_status)
+
         div.setAttribute(`data-board-id`, boardId)
 
         const headerDiv = document.createElement('div')
@@ -256,9 +255,7 @@ async function showHideButtonHandler(clickEvent) {
 
 async function deleteColumnId(clickEvent) {
     const statusId = clickEvent.target.dataset.statusId;
-    console.log(statusId)
     const boardId = clickEvent.target.dataset.boardId
-    console.log(boardId)
     await dataHandler.deleteColumn(boardId, statusId)
     location.reload()
 

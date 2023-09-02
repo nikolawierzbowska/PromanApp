@@ -147,11 +147,11 @@ def update_board(board_id: int):
     return data
 
 
-@app.route("/api/update_card/<int:card_id>", methods=["PATCH"])
+@app.route("/api/update_card/<int:card_id>", methods=["POST"])
 @json_response
 def update_card_title(card_id: int):
     data = request.json
-    return cards_handler.update_card_title_by_id(card_id, data["title"])
+    return cards_handler.update_card_title_by_id(card_id, data["renameCard"])
 
 
 

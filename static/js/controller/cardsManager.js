@@ -9,13 +9,19 @@ export let cardsManager = {
 
             const cardBuilder = htmlFactory(htmlTemplates.card);
             const content = cardBuilder(card);
+            orderCard()
 
             domManager.addChild(`.board[data-board-id="${boardId}"] .col`, content);
+
+
+
+
             domManager.addEventListener(
-                `.buttonDelCard[data-card-id="${card.id}"]`,
+                `button.buttonDelCard[data-card-id="${card.id}"]`,
                 "click",
                 deleteButtonHandler
             );
+
 
             domManager.addEventListener(
                 `.buttonTitleCard[data-card-id="${card.id}"]`,
@@ -25,12 +31,11 @@ export let cardsManager = {
 
 
         }
-         domManager.addEventListener(
-                `#addCardButton[data-board-id="${boardId}"]`,
-                "click",
-                createNewCard
-            );
-
+        domManager.addEventListener(
+            `#addCardButton[data-board-id="${boardId}"]`,
+            "click",
+            createNewCard
+        );
 
 
     },
@@ -38,7 +43,7 @@ export let cardsManager = {
 
 
 async function createNewCard(clickEvent) {
-const statusId = 1
+    const statusId = 1
     const boardId = clickEvent.target.dataset.boardId
     const formAddCard = document.querySelector(`.formAddCard`)
     formAddCard.addEventListener("submit", async event => {
@@ -47,7 +52,7 @@ const statusId = 1
         const data = Object.fromEntries(formData)
         const cardTitle = document.getElementById('addCardTitle').value
         if (cardTitle) {
-            await dataHandler.createNewCard(boardId,statusId,data)
+            await dataHandler.createNewCard(boardId, statusId, data)
 
             const myModal = document.getElementById('addCardModal')
 
@@ -59,7 +64,6 @@ const statusId = 1
 }
 
 
-
 async function deleteButtonHandler(clickEvent) {
     const cardId = clickEvent.target.dataset.cardId;
     await dataHandler.deleteCard(cardId)
@@ -69,19 +73,16 @@ async function deleteButtonHandler(clickEvent) {
 
 
 async function renameCardTitle(clickEvent) {
-    const cardId = clickEvent.target.dataset.boardId
-
-
-    const formRenameStatus = document.querySelector('.formRenameStatus')
-    formRenameStatus.addEventListener("submit", async event => {
+    const cardId = clickEvent.target.dataset.cardId
+    const formRenameCard = document.querySelector('.formRenameCard')
+    formRenameCard.addEventListener("submit", async event => {
         event.preventDefault()
-        const formData = new FormData(formRenameStatus);
+        const formData = new FormData(formRenameCard);
         const data = Object.fromEntries(formData)
 
-        await dataHandler.updateStatus(boardId, statusId, data).then((response) => {
-            console.log(response.status)
+        await dataHandler.updateCard(cardId, data).then((response) => {
             if (response.status === 200) {
-                const myModal = document.getElementById('renameStatusModal')
+                const myModal = document.getElementById('renameCardModal')
                 const modalBootstrap = new bootstrap.Modal(myModal)
                 modalBootstrap.hide()
 
@@ -92,7 +93,25 @@ async function renameCardTitle(clickEvent) {
         location.reload()
     });
 
-
-
 }
 
+function orderCard() {
+    let cards = document.getElementsByClassName('card')
+    let columns = document.getElementsByClassName('col[data-status-id]')
+
+    for(let card of cards) {
+        card.addEventListener("dragstart", function (e) {
+            let selected =e.target
+
+            for (let column of columns) {
+                column.addEventListener("dragover", function (e) {
+                    e.preventDefault()
+                })
+                column.addEventListener("drop", function (e) {
+                    column.appendChild(selected)
+                    selected = null
+                })
+            }
+            })
+    }
+}

@@ -22,7 +22,6 @@
 .container {
     margin: 10px 0 10px 0;
 
-
 }
 
 
@@ -65,7 +64,7 @@ a {
 
 .card {
     width: 250px;
-    margin: 15px 5px 3px 28px;
+    margin: 5px 5px 3px 28px;
     border: solid 1px black;
 }
 
@@ -75,10 +74,19 @@ a {
 
 }
 
-.headerTitle > button:hover, .buttonTitleCard:hover {
+.headerTitle > button:hover {
     font-weight: bolder;
     font-size: larger;
     cursor: pointer;
+}
+
+.buttonTitleCard, .buttonDelCard {
+    padding: 0;
+}
+
+.buttonDelCard {
+    margin-top: -5px;
+
 }
 
 .buttonTitleCard:hover {
@@ -104,6 +112,8 @@ a {
     color: red;
 
 }
+
+
 /*.buttonDel:hover .buttonDelCard:hover {*/
 /*    font-weight: bolder;*/
 /*    font-size: larger;*/
