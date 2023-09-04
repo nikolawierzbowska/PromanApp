@@ -63,7 +63,7 @@ async function loadStatus(boardId) {
     const statuses = await dataHandler.getStatusesForBoard(boardId)
     const board = await dataHandler.getBoard(boardId)
 
-    const column = document.querySelector(`.row[data-board-id="${board.id}"]`)
+    const column = document.querySelector(`.bodyCard[data-board-id="${board.id}"]`)
     column.innerHTML = ''
     statuses.forEach(item => {
         const div = document.createElement("div")
@@ -100,6 +100,11 @@ async function loadStatus(boardId) {
         headerDiv.appendChild(button)
         div.appendChild(headerDiv)
         column.appendChild(div);
+
+        const bodyCards = document.createElement("div")
+        bodyCards.classList.add("bodyCards")
+        bodyCards.setAttribute("data-status-id", item.id)
+        div.appendChild(bodyCards)
 
         domManager.addEventListener(
             `.buttonTitleColumn[data-board-id="${board.id}"][data-status-id="${item.id}"]`,

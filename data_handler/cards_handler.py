@@ -6,6 +6,7 @@ def get_cards_for_board(cursor, board_id):
         """
         SELECT * FROM cards
         WHERE cards.board_id = %(board_id)s
+      
         ;
         """
         , {"board_id": board_id})
@@ -51,3 +52,27 @@ def update_card_title_by_id(cursor, card_id, title):
         WHERE id = %(card_id)s;
         """, {"title": title,
             "card_id": card_id})
+
+
+@connection.connection_handler
+def update_card_order_by_id(cursor, card_id, card_order):
+    cursor.execute(
+        """
+        UPDATE cards
+        SET card_order = %(card_order)s
+        WHERE id = %(card_id)s;
+        """, {"card_order": card_order,
+            "card_id": card_id})
+
+
+@connection.connection_handler
+def update_card_status_by_id(cursor, card_id, status_id):
+    cursor.execute(
+        """
+        UPDATE cards
+        SET status_id = %(status_id)s
+        WHERE id = %(card_id)s;
+        """, {"status_id": status_id,
+            "card_id": card_id})
+
+

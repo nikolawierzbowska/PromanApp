@@ -25,10 +25,19 @@
 }
 
 
+.bodyCard {
+    display: flex;
+
+}
+
+/*.bodyCards {*/
+/*    height: 150px;*/
+/*}*/
+
 .col {
     font-weight: bold;
     border: solid 1px black;
-    background-color: #c9d0de;
+    background-color: #e0e8ff;
     padding: 0;
 
     height: 300px;
@@ -63,9 +72,10 @@ a {
 /*}*/
 
 .card {
-    width: 250px;
-    margin: 5px 5px 3px 28px;
+    width: 240px;
+    margin: 10px 5px 5px 28px;
     border: solid 1px black;
+    display: flex;
 }
 
 
@@ -85,7 +95,9 @@ a {
 }
 
 .buttonDelCard {
-    margin-top: -5px;
+    position: absolute;
+    right: 7px;
+
 
 }
 
@@ -107,7 +119,6 @@ a {
 
 .buttonDel:hover, .buttonDelCard:hover {
     font-weight: bolder;
-    ;
     cursor: pointer;
     color: red;
 

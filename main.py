@@ -159,7 +159,6 @@ def update_card_title(card_id: int):
 @json_response
 def update_status_title(board_id: int, status_id: int):
     data = request.json
-
     return status_handler.update_status(board_id, status_id, data["renameStatus"])
 
 
@@ -168,8 +167,22 @@ def update_status_title(board_id: int, status_id: int):
 @json_response
 def add_status_title(board_id:int):
     data = request.json
-
     return status_handler.add_status(board_id, data["addStatus"])
+
+
+
+@app.route("/api/update_order/<int:card_id>/", methods=["PUT"])
+@json_response
+def update_card_order(card_id: int):
+    data = request.json
+    return cards_handler.update_card_order_by_id(card_id, data["card_order"])
+
+
+@app.route("/api/update_status/<int:card_id>/", methods=["PUT"])
+@json_response
+def update_card_status(card_id: int):
+    data = request.json
+    return cards_handler.update_card_status_by_id(card_id, data["status_id"])
 
 
 def main():

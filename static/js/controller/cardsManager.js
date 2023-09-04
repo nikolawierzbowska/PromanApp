@@ -9,12 +9,12 @@ export let cardsManager = {
 
             const cardBuilder = htmlFactory(htmlTemplates.card);
             const content = cardBuilder(card);
+
+
+            domManager.addChild(`.board[data-board-id="${boardId}"] .bodyCards[data-status-id="${card.status_id}"]`, content);
+
             orderCard()
-
-            domManager.addChild(`.board[data-board-id="${boardId}"] .col`, content);
-
-
-
+            changeStatus()
 
             domManager.addEventListener(
                 `button.buttonDelCard[data-card-id="${card.id}"]`,
@@ -96,22 +96,154 @@ async function renameCardTitle(clickEvent) {
 }
 
 function orderCard() {
-    let cards = document.getElementsByClassName('card')
-    let columns = document.getElementsByClassName('col[data-status-id]')
+    const cards = document.getElementsByClassName('card')
+    const dragArea = document.querySelectorAll(`.bodyCards[data-status-id]`)
 
-    for(let card of cards) {
+    for (let card of cards) {
         card.addEventListener("dragstart", function (e) {
-            let selected =e.target
+            let selected = e.target
+            console.log("dragstart")
+            selected.classList.add("dragging");
+            let cardId = selected.getAttribute("data-card-id");
+            let cardStatus = selected.getAttribute("data-card-status");
+            e.dataTransfer.setData("text/plain", cardId);
+            e.dataTransfer.setData("text/status", cardStatus);
+        })
+    }
 
-            for (let column of columns) {
-                column.addEventListener("dragover", function (e) {
-                    e.preventDefault()
-                })
-                column.addEventListener("drop", function (e) {
-                    column.appendChild(selected)
-                    selected = null
-                })
+    for (let dragAr of dragArea) {
+        dragAr.addEventListener("dragover", function (e) {
+            console.log("dragover")
+            e.preventDefault()
+        })
+    }
+
+
+    for (let card of cards) {
+        for (let dragAr of dragArea) {
+            dragAr.addEventListener("drop", async function (e) {
+                e.preventDefault();
+                let selected = document.querySelector(".card.dragging");
+                if (selected) {
+                    let target = e.target;
+                    while (target && !target.classList.contains("card")) {
+                        target = target.parentElement;
+                    }
+                    const parent = selected.parentElement;
+                    const selectedIndex = Array.from(parent.children).indexOf(selected);
+                    const selectedOrder = selected.getAttribute("data-card-order");
+                    const targetOrder = target.getAttribute("data-card-order");
+
+                    const targetIndex = Array.from(parent.children).indexOf(target);
+                    if (selectedIndex !== -1 && targetIndex !== -1) {
+                        if (selectedIndex < targetIndex) {
+                            target.after(selected);
+                        } else {
+                            target.before(selected);
+                        }
+                        selected.classList.remove("dragging");
+                    }
+
+
+                    selected.setAttribute("data-card-order", targetOrder);
+                    target.setAttribute("data-card-order", selectedOrder);
+
+                    let cardId = parseInt(selected.getAttribute("data-card-id"));
+                    const formData = new FormData();
+                    formData.append("card_order", targetOrder);
+                    const data = Object.fromEntries(formData);
+                    await dataHandler.updateCardOrder(cardId, data).then((response) => {
+                        if (response.status === 200) {
+                            console.log(response.status);
+                        } else {
+                            console.log(response.status);
+                        }
+                    });
+
+                    let cardIdTarget = parseInt(target.getAttribute("data-card-id"));
+                    const formDataTarget = new FormData();
+                    formDataTarget.append("card_order", selectedOrder);
+                    const dataTarget = Object.fromEntries(formDataTarget);
+                    await dataHandler.updateCardOrder(cardIdTarget, dataTarget).then((response) => {
+                        if (response.status === 200) {
+                            console.log(response.status);
+                        } else {
+                            console.log(response.status);
+                        }
+                    });
+                }
+
+            });
+        }
+    }
+
+}
+
+function changeStatus() {
+    const cards = document.getElementsByClassName('card')
+    const dragArea = document.querySelectorAll(`.col[data-status-id]`)
+    // const bodyCards = document.querySelectorAll(`.bodyCards`)
+
+    for (let card of cards) {
+        card.addEventListener("dragstart", function (e) {
+            let selected = e.target
+            console.log("dragstart")
+
+            selected.classList.add("dragging");
+            let cardId = selected.getAttribute("data-card-id");
+            let cardStatus = selected.getAttribute("data-card-status");
+            e.dataTransfer.setData("text/plain", cardId);
+            e.dataTransfer.setData("text/status", cardStatus);
+        })
+    }
+
+    for (let dragAr of dragArea) {
+        dragAr.addEventListener("dragover", function (e) {
+            console.log("dragover")
+            e.preventDefault()
+        })
+    }
+
+
+    for (let dragAr of dragArea) {
+        dragAr.addEventListener("drop", async function (e) {
+            e.preventDefault();
+            let selected = document.querySelector(".card.dragging");
+
+            if (selected) {
+                let target = e.target;
+
+                while (target && !target.classList.contains("col")) {
+                    target = target.parentElement;
+                }
+
+                if (target) {
+                    console.log("dragging")
+                    const targetStatus = target.getAttribute("data-status-id");
+
+                    selected.classList.remove("dragging");
+                    selected.setAttribute("data-card-status", targetStatus);
+                    target.appendChild(selected)
+
+                    let cardId = parseInt(selected.getAttribute("data-card-id"));
+                    const formData = new FormData();
+
+                    formData.append("status_id", targetStatus);
+                    const data = Object.fromEntries(formData);
+                    await dataHandler.updateCardStatus(cardId, data).then((response) => {
+                        if (response.status === 200) {
+                            console.log("change status")
+                            console.log(response.status);
+                        } else {
+                            console.log(response.status);
+                        }
+                    });
+
+                }
             }
-            })
+        })
     }
 }
+
+
+

@@ -58,10 +58,10 @@ export let dataHandler = {
     },
 
     getCard: async function (cardId) {
-        return await apiGet(`/api/boards/cards/${cardId}`)
-        // the card is retrieved and then the callback function is called with the card
+        return await apiGet(`/api/boards/cards/${cardId}`,{
+                method: "GET",
+        })
     },
-
     createNewBoard: async function (boardTitle) {
         return await apiPut(`/api/new_board`, boardTitle)
         // creates new board, saves it and calls the callback function with its data
@@ -104,26 +104,53 @@ export let dataHandler = {
     },
 
 
-createNewStatus: async function (boardId, statusTitle) {
-    return await apiPut(`/api/boards/${boardId}/new_status`, statusTitle)
-}
-,
+    createNewStatus: async function (boardId, statusTitle) {
+        return await apiPut(`/api/boards/${boardId}/new_status`, statusTitle)
+    },
 
 
-updateStatus: async function (boardId, statusId, statusTitle) {
-    return await fetch(`/api/boards/${boardId}/update_status/${statusId}`, {
-        method: "POST",
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(statusTitle),
-    })
-}
-,
+    updateStatus: async function (boardId, statusId, statusTitle) {
+        return await fetch(`/api/boards/${boardId}/update_status/${statusId}`, {
+            method: "POST",
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(statusTitle),
+        })
+    },
 
-}
-;
+
+    updateCardOrder: async function(cardId, cardOrder) {
+        return await fetch(`/api/update_order/${cardId}`, {
+            method: "PUT",
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(cardOrder),
+        })
+    },
+
+     updateCardStatus: async function(cardId, cardStatus) {
+        return await fetch(`/api/update_status/${cardId}`, {
+            method: "PUT",
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(cardStatus),
+        })
+    },
+
+
+
+};
+
+
+
+
+
 
 
 async function apiGet(url) {
