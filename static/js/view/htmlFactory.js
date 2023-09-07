@@ -32,10 +32,11 @@ function boardBuilder(board) {
                         <div id="collapse-${board.id}" class="accordion-collapse collapse " data-bs-parent="#accordiondata-${board.id}">
                             <div class="accordion-body" id="accordionBodyId">
                                 <button type="button" id="renameBoardButton" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#renameBoardModal"  data-board-id="${board.id}">Rename Board</button>
+                                 <button type="button" id="deleteBoardButton" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#deleteBoardModal" data-board-id="${board.id}">Delete Board</button> 
                                 <button type="button" id="addCardButton" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#addCardModal" data-board-id="${board.id}"> Add Card</button>
-                                <button type="button" id="deleteBoardButton" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#deleteBoardModal" data-board-id="${board.id}">Delete Board</button> 
                                 <button type="button" id="addStatusButton" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#addStatusModal" data-board-id="${board.id}">Add status</button> 
-
+                                <button type="button" id="archiveButton" class="btn btn-primary " data-board-id="${board.id}">Archived Cards</button>    
+                                    
                                   <div class="container text-center id=containerColumn" data-board-id="${board.id}">
                                     <div class="row align-items-start" data-board-id="${board.id}">
                                         <div class="bodyCard" data-board-id="${board.id}">
@@ -59,9 +60,11 @@ function boardBuilder(board) {
 
 function cardBuilder(card) {
     return `
-            <div class="card" data-card-id="${card.id}" data-card-status="${card.status_id}" data-card-order="${card.card_order}" draggable="true">
+            <div class="card" data-card-id="${card.id}" data-card-status="${card.status_id}" data-card-order="${card.card_order}" data-card-archive="${card.archive}" data-board-id="${card.board_id}" draggable="true">
                 <div>
                     <button class="buttonTitleCard" data-card-id="${card.id}" data-bs-toggle="modal" data-bs-target="#renameCardModal">${card.title} </button>
+                    
+                    <button class="buttonArchive"  data-card-id="${card.id}" data-board-id="${card.board_id}">\u2601</button>
                     <button class="buttonDelCard"  data-card-id="${card.id}">\u2715</button>
                 </div>
             

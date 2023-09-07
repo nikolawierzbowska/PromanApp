@@ -12,6 +12,17 @@ def get_user_by_name(cursor, user_name, email):
 
 
 @connection.connection_handler
+def get_user(cursor, user_id):
+    cursor.execute(
+        """
+        SELECT * FROM users
+        WHERE id = %(id)s;
+        """, {"id": user_id})
+    return cursor.fetchone()
+
+
+
+@connection.connection_handler
 def add_user(cursor, user_name, email, password):
     cursor.execute("""
                     INSERT INTO users(user_name, email, password)

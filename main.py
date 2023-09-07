@@ -50,7 +50,7 @@ def login():
         session["userNameEmail"] = user_name_email
         session['is_logged'] = True
         session['user_id'] = user['id']
-        return jsonify(["Login successful"]), 200
+        return jsonify({"message": "Login successful", "user_id": user['id']}), 200
     else:
         return jsonify(["Incorrect username/email or password."]), 404
 
@@ -82,12 +82,33 @@ def get_board(board_id: int):
     return boards_handler.get_board(board_id)
 
 
+@app.route("/api/users/<int:user_id>")
+@json_response
+def get_user(user_id: int):
+    return users_handler.get_user(user_id)
+
+
 @app.route("/api/new_board", methods=["PUT"])
 @json_response
 def create_new_board():
     data = request.json
-    boards_handler.add_board(data["titleBoard"])
-    return data
+    return  boards_handler.add_board(data["titleBoard"])
+
+
+
+@app.route("/api/users/<int:user_id>/boards/new_board", methods=["PUT"])
+@json_response
+def create_new_board_private(user_id: int):
+    data = request.json
+    return boards_handler.add_board_private(user_id, data["titleBoardPrivate"])
+
+
+@app.route("/api/users/<int:user_id>/boards/")
+@json_response
+def get_boards_private(user_id):
+    return boards_handler.get_boards_private(user_id)
+
+
 
 
 @app.route("/api/boards/<int:board_id>/cards/statuses/<int:status_id>", methods=["POST"])
@@ -183,6 +204,20 @@ def update_card_order(card_id: int):
 def update_card_status(card_id: int):
     data = request.json
     return cards_handler.update_card_status_by_id(card_id, data["status_id"])
+
+
+@app.route("/api/update_archive/<int:card_id>/", methods=["PUT"])
+@json_response
+def update_card_archive(card_id: int):
+    data = request.json
+    return cards_handler.update_card_archive_by_id(card_id, data["archive"])
+
+
+@app.route("/api/archived_cards/<int:board_id>/")
+@json_response
+def get_archived_cards(board_id):
+    return cards_handler.get_cards_archived(board_id)
+
 
 
 def main():

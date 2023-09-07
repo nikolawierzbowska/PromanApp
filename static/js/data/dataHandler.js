@@ -46,30 +46,72 @@ export let dataHandler = {
     },
 
 
-
-    getStatus: async function (boardId, statusId) {
-        return await apiGet(`/api/boards/${boardId}/statuses/${statusId}`)
-
-    },
+    // getStatus: async function (boardId, statusId) {
+    //     return await apiGet(`/api/boards/${boardId}/statuses/${statusId}`)
+    //
+    // },
 
 
     getCardsByBoardId: async function (boardId) {
         return await apiGet(`/api/boards/${boardId}/cards/`);
     },
 
-    getCard: async function (cardId) {
-        return await apiGet(`/api/boards/cards/${cardId}`,{
-                method: "GET",
-        })
-    },
+    // getCard: async function (cardId) {
+    //     return await apiGet(`/api/boards/cards/${cardId}`,{
+    //             method: "GET",
+    //     })
+    // },
+
     createNewBoard: async function (boardTitle) {
         return await apiPut(`/api/new_board`, boardTitle)
-        // creates new board, saves it and calls the callback function with its data
     },
+
+
+    createNewBoardPrivate: async function (userId, boardTitle) {
+        return await fetch(`/api/users/${userId}/boards/new_board`, {
+            method: "PUT",
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(boardTitle),
+        })
+    },
+
+    getUser: async function (userId) {
+        return await fetch(`/api/users/${userId}/`, {
+        method: "GET",
+    })
+    },
+
+    getBoardPrivate: async function (userId) {
+        return await fetch(`/api/users/${userId}/boards/`, {
+            method: "GET",
+        })
+    },
+
+
+    createNewCardPrivate: async function (userId, boardId, statusId, cardTitle) {
+        return await fetch(`/api/users/${userId}/boards/${boardId}/cards/statuses/${statusId}`, {
+            method: "PUT",
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(cardTitle),
+        })
+    },
+
+
+    getCardsPrivateByBoardId: async function (userId, boardId) {
+        return await fetch(`/api/users/${userId}/boards/${boardId}/cards/`, {
+            method: "GET",
+        })
+    },
+
 
     createNewCard: async function (boardId, statusId, cardTitle) {
         return await apiPost(`/api/boards/${boardId}/cards/statuses/${statusId}`, cardTitle)
-        // creates new card, saves it and calls the callback function with its data
     },
 
     deleteBoard: async function (boardId) {
@@ -121,7 +163,7 @@ export let dataHandler = {
     },
 
 
-    updateCardOrder: async function(cardId, cardOrder) {
+    updateCardOrder: async function (cardId, cardOrder) {
         return await fetch(`/api/update_order/${cardId}`, {
             method: "PUT",
             headers: {
@@ -132,7 +174,7 @@ export let dataHandler = {
         })
     },
 
-     updateCardStatus: async function(cardId, cardStatus) {
+    updateCardStatus: async function (cardId, cardStatus) {
         return await fetch(`/api/update_status/${cardId}`, {
             method: "PUT",
             headers: {
@@ -143,14 +185,26 @@ export let dataHandler = {
         })
     },
 
+     updateCardArchive: async function (cardId, cardArchive) {
+        return await fetch(`/api/update_archive/${cardId}/`, {
+            method: "PUT",
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(cardArchive),
+        })
+    },
+
+    getCardsArchived: async function (boardId) {
+        return await fetch(`/api/archived_cards/${boardId}`, {
+            method: "GET",
+        })
+    },
+
 
 
 };
-
-
-
-
-
 
 
 async function apiGet(url) {

@@ -6,6 +6,7 @@ def get_cards_for_board(cursor, board_id):
         """
         SELECT * FROM cards
         WHERE cards.board_id = %(board_id)s
+        AND archive is false
       
         ;
         """
@@ -28,8 +29,8 @@ def get_card_by_id(cursor, card_id):
 def add_card(cursor, board_id, status_id, title):
     cursor.execute(
         """
-        INSERT INTO cards(board_id, status_id, title)
-        VALUES (%(board_id)s, %(status_id)s , %(title)s);    
+        INSERT INTO cards(board_id, status_id, title, archive)
+        VALUES (%(board_id)s, %(status_id)s , %(title)s, false);    
         """, {"board_id":board_id,
               "status_id":status_id,
               "title": title})
@@ -75,4 +76,25 @@ def update_card_status_by_id(cursor, card_id, status_id):
         """, {"status_id": status_id,
             "card_id": card_id})
 
+
+@connection.connection_handler
+def update_card_archive_by_id(cursor, card_id, archive):
+    cursor.execute(
+        """
+        UPDATE cards
+        SET archive= %(archive)s
+        WHERE id = %(card_id)s;
+        """, {"archive": archive,
+            "card_id": card_id})
+
+
+@connection.connection_handler
+def get_cards_archived(cursor, board_id):
+    cursor.execute("""
+        SELECT * 
+        FROM cards
+        WHERE archive is true 
+        and board_id = %(board_id)s;
+        """, {"board_id" :board_id})
+    return cursor.fetchall()
 

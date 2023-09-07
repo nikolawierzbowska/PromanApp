@@ -5,8 +5,20 @@ def get_boards(cursor):
     cursor.execute(
         """
         SELECT * FROM boards
+        where user_id is null
         ;
         """)
+    return cursor.fetchall()
+
+
+@connection.connection_handler
+def get_boards_private(cursor, user_id):
+    cursor.execute(
+        """
+        SELECT * FROM boards
+        WHERE  user_id =%(user_id)s;
+        """, {"user_id": user_id})
+
     return cursor.fetchall()
 
 
@@ -48,6 +60,29 @@ def add_board(cursor, title):
             
         """, {"board_id": new_board_id})
 
+
+@connection.connection_handler
+def add_board_private(cursor, user_id, title):
+    cursor.execute(
+        """
+        INSERT INTO boards(user_id, title)
+        VALUES (%(user_id)s, %(title)s)
+        RETURNING id;
+
+        """, {"user_id" :user_id,
+            "title": title})
+    new_board_id = cursor.fetchone()["id"]
+
+    cursor.execute(
+        """
+        INSERT INTO board_status(board_id, status_id, status_title)
+        SELECT %(board_id)s, statuses.id, statuses.title
+        from boards
+        cross join statuses
+        WHERE boards.id = %(board_id)s
+        AND statuses.column_rec='1';
+
+        """, {"board_id": new_board_id})
 
 
 @connection.connection_handler

@@ -3,6 +3,7 @@ import {dataHandler} from "./data/dataHandler.js";
 import {domManager} from "./view/domManager.js";
 
 
+
 function init() {
 
 
@@ -11,6 +12,7 @@ function init() {
     logout()
 
     boardsManager.loadBoards();
+
 }
 
 
@@ -40,6 +42,7 @@ function addRegisterFormListener() {
                     document.getElementById('logoutButton').style.display = 'none';
                     document.getElementById('registerButton').style.displayy = 'none';
                     document.getElementById('loginButton').style.display= "block";
+                    document.getElementById('buttonNewBoardPrivate').style.display = 'none';
                 } else if (response.status === 404 || response.status === 401) {
                     response.json()
                     .then(data => errors.textContent = data)
@@ -92,22 +95,37 @@ function addLoginFormListener() {
         const formData = new FormData(formLogin);
         const data = Object.fromEntries(formData)
 
+
         await dataHandler.postUser(data).then((response) => {
             console.log(response)
             if (response.status === 200) {
-                const myModal = document.getElementById('loginModal')
-                formLogin.reset()
-                myModal.classList.remove('show');
-                myModal.style.display = 'none';
-                document.body.classList.remove('modal-open');
-                document.querySelector('.modal-backdrop').remove();
-                document.getElementById('logoutButton').style.display = 'block';
-                document.getElementById('registerButton').style.display= 'none';
-                document.getElementById('loginButton').style.display= "none";
+                response.json().then((userData) => {
+                    const userId = userData["user_id"];
+                    console.log(userId)
+                    boardsManager.getBoardsPrivate(userId)
+                    boardsManager.createNewBoardPrivateForm(userId)
+
+
+
+
+
+                    const myModal = document.getElementById('loginModal')
+                    formLogin.reset()
+                    myModal.classList.remove('show');
+                    myModal.style.display = 'none';
+                    document.body.classList.remove('modal-open');
+                    document.querySelector('.modal-backdrop').remove();
+                    document.getElementById('logoutButton').style.display = 'block';
+                    document.getElementById('buttonNewBoard').style.display = 'none';
+                    document.getElementById('buttonNewBoardPrivate').style.display = 'block';
+                    document.getElementById('registerButton').style.display = 'none';
+                    document.getElementById('loginButton').style.display = "none";
+                })
             } else if (response.status === 404 || response.status === 401) {
                 response.json()
                 .then(data => errors.textContent = data)
             }
+
 
         })
     })
@@ -123,8 +141,10 @@ function logout() {
             console.log(response)
             if (response.ok) {
                 document.getElementById('logoutButton').style.display = 'none';
-                document.getElementById('registerButton').style.display = 'none';
+                document.getElementById('registerButton').style.display = 'block';
                 document.getElementById('loginButton').style.display = "block";
+                document.getElementById('buttonNewBoardPrivate').style.display = 'none';
+                document.getElementById('buttonNewBoard').style.display = 'block';
             }
         })
     })
