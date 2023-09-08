@@ -106,6 +106,7 @@ def create_new_board_private(user_id: int):
 @app.route("/api/users/<int:user_id>/boards/")
 @json_response
 def get_boards_private(user_id):
+    # sprawdzenie userid sesja
     return boards_handler.get_boards_private(user_id)
 
 

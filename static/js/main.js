@@ -13,6 +13,8 @@ function init() {
 
     boardsManager.loadBoards();
 
+
+
 }
 
 
@@ -102,7 +104,7 @@ function addLoginFormListener() {
                 response.json().then((userData) => {
                     const userId = userData["user_id"];
                     console.log(userId)
-                    boardsManager.getBoardsPrivate(userId)
+                    boardsManager.loadBoardsPrivate(userId)
                     boardsManager.createNewBoardPrivateForm(userId)
 
 

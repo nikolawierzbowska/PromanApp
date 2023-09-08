@@ -7,6 +7,7 @@ import {cardsManager} from "./cardsManager.js";
 export let boardsManager = {
     loadBoards: async function () {
         const boards = await dataHandler.getBoards();
+        // połaczenie boardów
 
         for (let board of boards) {
 
@@ -49,65 +50,85 @@ export let boardsManager = {
         createNewBoard()
 
 
+    },
+
+    loadBoardsPrivate: async function (userId) {
+
+        dataHandler.getBoardPrivate(userId)
+            .then(response => response.json())
+            .then(boards => {
+                console.log(boards)
+
+                for (let board of boards) {
+                    console.log(board)
+                    const boardBuilder = htmlFactory(htmlTemplates.board);
+                    const content = boardBuilder(board);
+                    domManager.addChild("#root", content);
+                    domManager.spaceBetweenBoards(board)
+
+                }
+
+            })
+
 
     },
 
-    createNewBoardPrivateForm: async function(userId) {
-    const formCreateNewBoardPrivate = document.querySelector(`.formCreateBoardPrivate`)
-    formCreateNewBoardPrivate.addEventListener("submit", async event => {
-        event.preventDefault();
-        const formData = new FormData(formCreateNewBoardPrivate);
-        const data = Object.fromEntries(formData)
-        const boardTitlePrivate = document.getElementById('titleBoardPrivate').value
-        if (boardTitlePrivate) {
-            console.log(boardTitlePrivate)
-            await dataHandler.createNewBoardPrivate(userId, data)
-            // await dataHandler.getBoardPrivate(userId)
-            console.log(userId)
-            console.log(data)
+
+    createNewBoardPrivateForm: async function (userId) {
+        const formCreateNewBoardPrivate = document.querySelector(`.formCreateBoardPrivate`)
+        formCreateNewBoardPrivate.addEventListener("submit", async event => {
+            event.preventDefault();
+            const formData = new FormData(formCreateNewBoardPrivate);
+            const data = Object.fromEntries(formData)
+            const boardTitlePrivate = document.getElementById('titleBoardPrivate').value
+            if (boardTitlePrivate) {
+                console.log(boardTitlePrivate)
+                await dataHandler.createNewBoardPrivate(userId, data)
+                // await dataHandler.getBoardPrivate(userId)
+                console.log(userId)
+                console.log(data)
+
+                const myModal = document.getElementById('newBoardModal')
+
+                const modalBootstrap = new bootstrap.Modal(myModal)
+                modalBootstrap.hide()
+
+                location.reload()
+            }
+            // document.getElementById('logoutButton').style.display = 'block';
+            //     document.getElementById('buttonNewBoard').style.display = 'none';
+            //     document.getElementById('buttonNewBoardPrivate').style.display = 'block';
+            //     document.getElementById('registerButton').style.display = 'none';
+            //     document.getElementById('loginButton').style.display = "none";
 
 
-
-            const myModal = document.getElementById('newBoardModal')
-
-            const modalBootstrap = new bootstrap.Modal(myModal)
-            modalBootstrap.hide()
-            // location.reload()
-        }
-        // document.getElementById('logoutButton').style.display = 'block';
-        //     document.getElementById('buttonNewBoard').style.display = 'none';
-        //     document.getElementById('buttonNewBoardPrivate').style.display = 'block';
-        //     document.getElementById('registerButton').style.display = 'none';
-        //     document.getElementById('loginButton').style.display = "none";
-
-
-    });
-},
-    getBoardsPrivate: async function(userId){
-        await dataHandler.getBoardPrivate(userId).then((response) => {
-            console.log(response)
-            // const root = document.querySelector("#root")
-            // for (const board of Response) {
-            // const boardElement = document.createElement("div");
-            // boardElement.classList.add("board");
-            //
-            // boardElement.textContent = board.title;
-            //
-            // root.appendChild(boardElement);
-        // }
-
-
-        })
+        });
     },
+    // getBoardsPrivate: async function (userId) {
+    //
+    //     await dataHandler.getBoardPrivate(userId).then((response) => {
+    //         const root = document.querySelector("#root")
+    //         console.log(response.json())
+    //         // response.json().then((data) => {
+    // root.append(response)
+    // })
 
+
+    // for (const board of Response) {
+    // const boardElement = document.createElement("div");
+    // boardElement.classList.add("board");
+    //
+    // boardElement.textContent = board.title;
+    //
+    // root.appendChild(boardElement);
+    // }
+
+
+    // })
+    // },
 
 
 }
-
-
-
-
-
 
 
 // async function getStatus(boardId, statusId) {
@@ -190,21 +211,23 @@ async function createNewBoard() {
         const data = Object.fromEntries(formData)
         const boardTitle = document.getElementById('titleBoard').value
         if (boardTitle) {
-            await dataHandler.createNewBoard(data)
+            await dataHandler.createNewBoard(data).then((response) => {
+                if (response.status === 200) {
+                    const myModal = document.getElementById('renameCardModal')
+                    formCreateNewBoard.reset()
+                    const modalBootstrap = new bootstrap.Modal(myModal)
+                    modalBootstrap.hide()
 
-            const myModal = document.getElementById('newBoardModal')
-
-            const modalBootstrap = new bootstrap.Modal(myModal)
-            modalBootstrap.hide()
-            location.reload()
+                    const activeBoards = document.querySelectorAll(`.board[data-board-id]`)
+                    activeBoards.forEach(activeBoard => {
+                    activeBoard.remove()
+            })
+            boardsManager.loadBoards()
+                }
+            })
         }
-
     });
 }
-
-
-
-
 
 
 async function renameBoardButtonHandler(clickEvent) {

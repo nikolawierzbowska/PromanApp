@@ -69,28 +69,42 @@ async function createNewCard(clickEvent) {
         const data = Object.fromEntries(formData)
         const cardTitle = document.getElementById('addCardTitle').value
         if (cardTitle) {
-            await dataHandler.createNewCard(boardId, statusId, data)
+            await dataHandler.createNewCard(boardId, statusId, data).then((response => {
+                const myModal = document.getElementById('addCardModal')
+                formAddCard.reset()
+                const modalBootstrap = new bootstrap.Modal(myModal)
+                modalBootstrap.hide()
 
-            const myModal = document.getElementById('addCardModal')
+            }))
+            const cardsStatusFalse = document.querySelectorAll(`.card[data-card-archive="${false}"]`)
+            cardsStatusFalse.forEach(cardFalse => {
+                cardFalse.remove()
+            })
+            cardsManager.loadCards(boardId)
 
-            const modalBootstrap = new bootstrap.Modal(myModal)
-            modalBootstrap.hide()
         }
-        location.reload()
+
     });
 }
 
 
 async function deleteButtonHandler(clickEvent) {
     const cardId = clickEvent.target.dataset.cardId;
-    await dataHandler.deleteCard(cardId)
-    location.reload()
-
+    const boardId = clickEvent.target.dataset.boardId
+    await dataHandler.deleteCard(cardId).then((response) => {
+         const cardsStatusFalse = document.querySelectorAll(`.card[data-card-archive="${false}"]`)
+            cardsStatusFalse.forEach(cardFalse => {
+                cardFalse.remove()
+            })
+            cardsManager.loadCards(boardId)
+    })
 }
 
 
 async function renameCardTitle(clickEvent) {
     const cardId = clickEvent.target.dataset.cardId
+    const boardId = clickEvent.target.dataset.boardId
+    console.log(boardId)
     const formRenameCard = document.querySelector('.formRenameCard')
     formRenameCard.addEventListener("submit", async event => {
         event.preventDefault()
@@ -99,17 +113,20 @@ async function renameCardTitle(clickEvent) {
 
         await dataHandler.updateCard(cardId, data).then((response) => {
             if (response.status === 200) {
-                const myModal = document.getElementById('renameCardModal')
-                const modalBootstrap = new bootstrap.Modal(myModal)
-                modalBootstrap.hide()
+                    const myModal = document.getElementById('renameCardModal')
+                    formRenameCard.reset()
+                    const modalBootstrap = new bootstrap.Modal(myModal)
+                    modalBootstrap.hide()
 
-            } else {
-                console.log(response.status)
+                    const cardsStatusFalse = document.querySelectorAll(`.card[data-card-archive="${false}"]`)
+                    cardsStatusFalse.forEach(cardFalse => {
+                        console.log("remove cards")
+                        cardFalse.remove()
+                    })
+                    cardsManager.loadCards(boardId)
             }
         })
-        location.reload()
     });
-
 }
 
 function orderCard() {
@@ -266,11 +283,15 @@ function changeStatus() {
 function archiveCards(clickEvent) {
     const cards = document.querySelectorAll(".card")
 
-
     for (let card of cards) {
         const cardId = clickEvent.target.dataset.cardId
         const buttonsArchive = document.querySelectorAll(`.buttonArchive[data-card-id="${cardId}"]`)
         card.setAttribute("data-card-archive", "true")
+
+        const boardId = card.getAttribute("data-board-id")
+        console.log(boardId)
+        const containersArchive = document.querySelectorAll(`.containerArchive[data-board-id="${boardId}"]`)
+
 
         for (let button of buttonsArchive) {
             button.addEventListener("click", evt => {
@@ -283,10 +304,30 @@ function archiveCards(clickEvent) {
                         if (card.getAttribute("data-card-id") === cardId) {
                             card.style.display = "none"
                             console.log("archived card ok")
+                            for (let containerArchive of containersArchive) {
+                                console.log(containerArchive)
+
+                                containerArchive.appendChild(card)
+                                const buttonArchive = document.querySelectorAll(".buttonArchive")
+                                const buttonsDel = document.querySelectorAll(".buttonDelCard")
+
+                                for (let button of buttonArchive) {
+                                    for (let buttonDel of buttonsDel) {
+                                        if (containerArchive.contains(button) && containerArchive.contains(buttonDel)) {
+                                            buttonDel.textContent = ""
+                                            button.textContent = "A"
+                                            card.style.display = "block"
+                                            console.log("unarchived card show")
+                                        }
+                                    }
+                                }
+
+                            }
+                        } else {
+                            console.log(response.status);
                         }
-                    } else {
-                        console.log(response.status);
                     }
+
                 })
             })
         }
@@ -295,13 +336,12 @@ function archiveCards(clickEvent) {
 
 
 async function archivedCardButton(clickEvent) {
+
     const boardId = clickEvent.target.dataset.boardId
-    const cardId = clickEvent.target.dataset.cardId
-
-
     const containerBoards = document.querySelectorAll(`.container[data-board-id="${boardId}"]`)
 
     for (let containerBoard of containerBoards) {
+
         await dataHandler.getCardsArchived(boardId).then((response) => {
 
                 response.json().then((cards) => {
@@ -331,6 +371,7 @@ async function archivedCardButton(clickEvent) {
                             const cardBuilder = htmlFactory(htmlTemplates.card);
                             const content = cardBuilder(card);
                             domManager.addChild(`.containerArchive[data-board-id="${boardId}"]`, content.replace('☁', "A").replace("✕", ""));
+
 
                             domManager.addEventListener(
                                 `.buttonArchive[data-card-id="${cardId}"]`,
@@ -383,33 +424,40 @@ async function unArchived(clickEvent) {
     const cards = document.querySelectorAll(".card")
     for (let card of cards) {
         const cardId = clickEvent.target.dataset.cardId
+        const cardStatus = card.getAttribute("data-card-status")
+        const col = document.querySelectorAll(`.col[data-status-id="${cardStatus}"]`)
+
+        const boardId = card.getAttribute("data-board-id")
+        const containersArchive = document.querySelectorAll(`.containerArchive[data-board-id="${boardId}"]`)
+
         card.setAttribute("data-card-archive", "false")
         const unArchivedButtons = document.querySelectorAll(`.buttonArchive[data-card-id="${cardId}"]`)
 
-        for (let unArchivedButton of unArchivedButtons) {
-            unArchivedButton.addEventListener("click", event => {
+        for (let containerArchive of containersArchive) {
+            for (let c of col) {
+                const cardsInArchived = containerArchive.querySelectorAll(".card")
 
-                    const formData = new FormData();
-                    formData.append("archive", "false");
-                    const data = Object.fromEntries(formData);
-                    dataHandler.updateCardArchive(cardId, data).then((response) => {
-                        if (card.getAttribute("data-card-id") === cardId) {
-                            card.style.display = "none"
-                            console.log("unarchived card ok")
+                for (let unArchivedButton of unArchivedButtons) {
+                    unArchivedButton.addEventListener("click", event => {
 
-                            window.location.reload()
+                        const formData = new FormData();
+                        formData.append("archive", "false");
+                        const data = Object.fromEntries(formData);
+                        dataHandler.updateCardArchive(cardId, data).then((response) => {
 
-
-                        } else {
-                            console.log(response.status);
-                        }
+                            if (card.getAttribute("data-card-id") === cardId && cardsInArchived.length > 0) {
+                                const cardsStatusFalse = document.querySelectorAll(`.card[data-card-archive="${false}"]`)
+                                cardsStatusFalse.forEach(cardFalse => {
+                                    cardFalse.remove()
+                                    containerArchive.remove()
+                                })
+                                cardsManager.loadCards(boardId)
+                            }
+                        })
                     })
-
-            })
-
-
+                }
+            }
         }
-
     }
 }
 

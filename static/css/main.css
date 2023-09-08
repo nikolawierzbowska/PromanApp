@@ -88,10 +88,18 @@ a {
     cursor: pointer;
 }
 
-.buttonTitleCard, .buttonDelCard {
+.buttonDelCard {
     padding: 0;
+
 }
 
+
+
+
+.buttonTitleCard {
+    padding: 0;
+
+}
 
 .closeArchived {
 
@@ -169,8 +177,10 @@ button {
     border: 1px solid black;
     margin: 10px 0;
     padding: 5px;
-    height: auto;
-    width: auto;
+    /*height: auto;*/
+    /*width: auto;*/
+    text-align: center;
+
 
 }
 .containerArchive > .card {

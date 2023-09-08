@@ -62,10 +62,10 @@ function cardBuilder(card) {
     return `
             <div class="card" data-card-id="${card.id}" data-card-status="${card.status_id}" data-card-order="${card.card_order}" data-card-archive="${card.archive}" data-board-id="${card.board_id}" draggable="true">
                 <div>
-                    <button class="buttonTitleCard" data-card-id="${card.id}" data-bs-toggle="modal" data-bs-target="#renameCardModal">${card.title} </button>
+                    <button class="buttonTitleCard" data-card-id="${card.id}" data-bs-toggle="modal" data-bs-target="#renameCardModal" data-board-id="${card.board_id}">${card.title} </button>
                     
                     <button class="buttonArchive"  data-card-id="${card.id}" data-board-id="${card.board_id}">\u2601</button>
-                    <button class="buttonDelCard"  data-card-id="${card.id}">\u2715</button>
+                    <button class="buttonDelCard"  data-card-id="${card.id}" data-board-id="${card.board_id}">\u2715</button>
                 </div>
             
  

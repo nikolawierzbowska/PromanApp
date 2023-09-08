@@ -63,7 +63,14 @@ export let dataHandler = {
     // },
 
     createNewBoard: async function (boardTitle) {
-        return await apiPut(`/api/new_board`, boardTitle)
+          return await fetch(`/api/new_board`, {
+            method: "PUT",
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(boardTitle),
+        })
     },
 
 
@@ -80,8 +87,8 @@ export let dataHandler = {
 
     getUser: async function (userId) {
         return await fetch(`/api/users/${userId}/`, {
-        method: "GET",
-    })
+            method: "GET",
+        })
     },
 
     getBoardPrivate: async function (userId) {
@@ -111,7 +118,14 @@ export let dataHandler = {
 
 
     createNewCard: async function (boardId, statusId, cardTitle) {
-        return await apiPost(`/api/boards/${boardId}/cards/statuses/${statusId}`, cardTitle)
+        return await fetch(`/api/boards/${boardId}/cards/statuses/${statusId}`, {
+            method: "POST",
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(cardTitle)
+        });
     },
 
     deleteBoard: async function (boardId) {
@@ -125,7 +139,9 @@ export let dataHandler = {
 
 
     deleteCard: async function (cardId) {
-        return await apiDelete(`/api/delete_card/${cardId}`)
+         return await fetch(`/api/delete_card/${cardId}`, {
+            method: "DELETE",
+        })
     },
 
 
@@ -185,7 +201,7 @@ export let dataHandler = {
         })
     },
 
-     updateCardArchive: async function (cardId, cardArchive) {
+    updateCardArchive: async function (cardId, cardArchive) {
         return await fetch(`/api/update_archive/${cardId}/`, {
             method: "PUT",
             headers: {
@@ -201,7 +217,6 @@ export let dataHandler = {
             method: "GET",
         })
     },
-
 
 
 };
