@@ -142,6 +142,14 @@ function logout() {
         await dataHandler.logoutUser().then((response) => {
             console.log(response)
             if (response.ok) {
+                   const activeBoards = document.querySelectorAll(`.board[data-board-id]`)
+                    activeBoards.forEach(activeBoard => {
+                        activeBoard.remove()
+                    })
+                boardsManager.loadBoards()
+
+
+
                 document.getElementById('logoutButton').style.display = 'none';
                 document.getElementById('registerButton').style.display = 'block';
                 document.getElementById('loginButton').style.display = "block";

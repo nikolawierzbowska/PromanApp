@@ -104,6 +104,29 @@ def delete_board_by_id(cursor, board_id):
         """)
 
 
+@connection.connection_handler
+def delete_private_board_by_id(cursor,user_id, board_id):
+    cursor.execute(
+        """
+        DELETE FROM boards
+        WHERE user_id = %(user_id)s
+        and  id = %(board_id)s
+        """, {"user_id": user_id,
+            "board_id": board_id})
+
+    cursor.execute(
+        """
+        DELETE FROM statuses
+        WHERE column_rec = 0
+        AND id NOT IN (
+            SELECT status_id
+            FROM board_status)
+
+        """)
+
+
+
+
 
 
 @connection.connection_handler

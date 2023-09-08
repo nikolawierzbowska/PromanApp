@@ -46,24 +46,13 @@ export let dataHandler = {
     },
 
 
-    // getStatus: async function (boardId, statusId) {
-    //     return await apiGet(`/api/boards/${boardId}/statuses/${statusId}`)
-    //
-    // },
-
-
     getCardsByBoardId: async function (boardId) {
         return await apiGet(`/api/boards/${boardId}/cards/`);
     },
 
-    // getCard: async function (cardId) {
-    //     return await apiGet(`/api/boards/cards/${cardId}`,{
-    //             method: "GET",
-    //     })
-    // },
 
     createNewBoard: async function (boardTitle) {
-          return await fetch(`/api/new_board`, {
+        return await fetch(`/api/new_board`, {
             method: "PUT",
             headers: {
                 Accept: 'application/json',
@@ -85,33 +74,9 @@ export let dataHandler = {
         })
     },
 
-    getUser: async function (userId) {
-        return await fetch(`/api/users/${userId}/`, {
-            method: "GET",
-        })
-    },
 
     getBoardPrivate: async function (userId) {
         return await fetch(`/api/users/${userId}/boards/`, {
-            method: "GET",
-        })
-    },
-
-
-    createNewCardPrivate: async function (userId, boardId, statusId, cardTitle) {
-        return await fetch(`/api/users/${userId}/boards/${boardId}/cards/statuses/${statusId}`, {
-            method: "PUT",
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(cardTitle),
-        })
-    },
-
-
-    getCardsPrivateByBoardId: async function (userId, boardId) {
-        return await fetch(`/api/users/${userId}/boards/${boardId}/cards/`, {
             method: "GET",
         })
     },
@@ -129,24 +94,42 @@ export let dataHandler = {
     },
 
     deleteBoard: async function (boardId) {
-        return await apiDelete(`/api/delete_board/${boardId}`)
+        return await fetch(`/api/delete_board/${boardId}`, {
+            method: "DELETE",
+        })
+    },
+
+
+    deletePrivateBoard: async function (userId, boardId) {
+        return await fetch(`/api/users/${userId}/delete_private_board/${boardId}`, {
+            method: "DELETE",
+        })
     },
 
 
     deleteColumn: async function (boardId, statusId) {
-        return await apiDelete(`/api/boards/${boardId}/delete_column/${statusId}`)
+        return await fetch(`/api/boards/${boardId}/delete_column/${statusId}`, {
+            method: "DELETE",
+        })
     },
 
 
     deleteCard: async function (cardId) {
-         return await fetch(`/api/delete_card/${cardId}`, {
+        return await fetch(`/api/delete_card/${cardId}`, {
             method: "DELETE",
         })
     },
 
 
     updateBoard: async function (boardId, boardTitle) {
-        return await apiPatch(`/api/update_board/${boardId}`, boardTitle)
+        return await fetch(`/api/update_board/${boardId}`, {
+            method: "PUT",
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(boardTitle),
+        })
     },
 
 

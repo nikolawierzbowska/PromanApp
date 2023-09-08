@@ -106,8 +106,8 @@ def create_new_board_private(user_id: int):
 @app.route("/api/users/<int:user_id>/boards/")
 @json_response
 def get_boards_private(user_id):
-    # sprawdzenie userid sesja
-    return boards_handler.get_boards_private(user_id)
+    if session['user_id'] == user_id:
+        return boards_handler.get_boards_private(user_id)
 
 
 
@@ -149,6 +149,13 @@ def delete_board(board_id: int):
     return boards_handler.delete_board_by_id(board_id)
 
 
+@app.route("/api/users/<int:user_id>/delete_private_board/<int:boardId>", methods=["DELETE"])
+@json_response
+def delete_private_board(user_id:int, board_id: int):
+    if session['user_id'] == user_id:
+        return boards_handler.delete_private_board_by_id(user_id, board_id)
+
+
 @app.route("/api/boards/<int:board_id>/delete_column/<int:status_id>", methods=["DELETE"])
 @json_response
 def delete_column(board_id: int, status_id: int):
@@ -161,12 +168,11 @@ def delete_card(card_id:int):
     return cards_handler.delete_card_by_id(card_id)
 
 
-@app.route("/api/update_board/<int:board_id>", methods=["PATCH"])
+@app.route("/api/update_board/<int:board_id>", methods=["PUT"])
 @json_response
 def update_board(board_id: int):
     data = request.json
-    boards_handler.update_board_by_id(board_id, data["renameBoard"])
-    return data
+    return boards_handler.update_board_by_id(board_id, data["renameBoard"])
 
 
 @app.route("/api/update_card/<int:card_id>", methods=["POST"])
