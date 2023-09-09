@@ -146,7 +146,8 @@ function logout() {
                     activeBoards.forEach(activeBoard => {
                         activeBoard.remove()
                     })
-                boardsManager.loadBoards()
+                // boardsManager.loadBoards()
+                window.location.reload()
 
 
 

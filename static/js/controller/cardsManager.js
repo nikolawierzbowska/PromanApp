@@ -305,7 +305,6 @@ function archiveCards(clickEvent) {
                             card.style.display = "none"
                             console.log("archived card ok")
                             for (let containerArchive of containersArchive) {
-
                                 containerArchive.appendChild(card)
                                 const buttonArchive = document.querySelectorAll(".buttonArchive")
                                 const buttonsDel = document.querySelectorAll(".buttonDelCard")

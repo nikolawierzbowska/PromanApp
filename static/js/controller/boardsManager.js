@@ -93,7 +93,7 @@ export let boardsManager = {
                     activeBoards.forEach(activeBoard => {
                         activeBoard.remove()
                     })
-                    boardsManager.loadBoards()
+                    // boardsManager.loadBoards()
                     boardsManager.loadBoardsPrivate(userId)
                 })
 
@@ -196,7 +196,8 @@ async function createNewBoard() {
                     activeBoards.forEach(activeBoard => {
                         activeBoard.remove()
                     })
-                    boardsManager.loadBoards()
+                    // boardsManager.loadBoards()
+                    window.location.reload()
                 }
             })
         }
