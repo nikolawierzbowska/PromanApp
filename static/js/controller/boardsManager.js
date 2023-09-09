@@ -93,7 +93,7 @@ export let boardsManager = {
                     activeBoards.forEach(activeBoard => {
                         activeBoard.remove()
                     })
-                    // boardsManager.loadBoards()
+                    boardsManager.loadBoards()
                     boardsManager.loadBoardsPrivate(userId)
                 })
 
@@ -192,13 +192,14 @@ async function createNewBoard() {
                     const modalBootstrap = new bootstrap.Modal(myModal)
                     modalBootstrap.hide()
 
-                    const activeBoards = document.querySelectorAll(`.board[data-board-id]`)
-                    activeBoards.forEach(activeBoard => {
-                        activeBoard.remove()
-                    })
+                    // const activeBoards = document.querySelectorAll(`.board[data-board-id]`)
+                    // activeBoards.forEach(activeBoard => {
+                    //     activeBoard.remove()
+                    // })
                     // boardsManager.loadBoards()
-                    window.location.reload()
+
                 }
+                 window.location.reload()
             })
         }
     });
@@ -243,14 +244,15 @@ async function deleteBoard(clickEvent) {
                 const myModal = document.getElementById('deleteBoardModal')
                 const modalBootstrap = new bootstrap.Modal(myModal)
                 modalBootstrap.hide()
-                const activeBoards = document.querySelectorAll(`.board[data-board-id]`)
-                activeBoards.forEach(activeBoard => {
-                    activeBoard.remove()
-                })
-                boardsManager.loadBoards()
+                // const activeBoards = document.querySelectorAll(`.board[data-board-id]`)
+                // activeBoards.forEach(activeBoard => {
+                //     activeBoard.remove()
+                // })
+                // boardsManager.loadBoards()
 
 
             }
+            window.location.reload()
         })
 
     });

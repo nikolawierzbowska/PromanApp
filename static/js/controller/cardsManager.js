@@ -76,11 +76,11 @@ async function createNewCard(clickEvent) {
                 modalBootstrap.hide()
 
             }))
-            const cardsStatusFalse = document.querySelectorAll(`.card[data-card-archive="${false}"]`)
-            cardsStatusFalse.forEach(cardFalse => {
-                cardFalse.remove()
-            })
-            cardsManager.loadCards(boardId)
+            // const cardsStatusFalse = document.querySelectorAll(`.card[data-card-archive="${false}"]`)
+            // cardsStatusFalse.forEach(cardFalse => {
+            //     cardFalse.remove()
+            // })
+            window.location.reload()
 
         }
 
@@ -442,16 +442,18 @@ async function unArchived(clickEvent) {
                         formData.append("archive", "false");
                         const data = Object.fromEntries(formData);
                         dataHandler.updateCardArchive(cardId, data).then((response) => {
+                            console.log("cards arch")
 
-                            if (card.getAttribute("data-card-id") === cardId && cardsInArchived.length > 0) {
-                                const cardsStatusFalse = document.querySelectorAll(`.card[data-card-archive="${false}"]`)
-                                cardsStatusFalse.forEach(cardFalse => {
-                                    cardFalse.remove()
-                                    containerArchive.remove()
-                                })
-                                cardsManager.loadCards(boardId)
-                            }
+                            // if (card.getAttribute("data-card-id") === cardId && cardsInArchived.length > 0) {
+                            //     const cardsStatusFalse = document.querySelectorAll(`.card[data-card-archive="${false}"]`)
+                            //     cardsStatusFalse.forEach(cardFalse => {
+                            //         cardFalse.remove()
+                            //         containerArchive.remove()
+                            //     })
+                            //     cardsManager.loadCards(boardId)
+                            // }
                         })
+                        window.location.reload()
                     })
                 }
             }
